@@ -1,0 +1,36 @@
+.voters-info {
+    background-color: lightblue;
+    /* border: 1px solid black; */
+    border-radius: 7px;
+    width: 50%;
+    padding: 25px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 17px;
+    margin-bottom: 17px;
+    overflow: auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 7px;
+  }
+  
+  table td, table th {
+    border: 1px solid #ddd;
+    padding: 3px;
+  }
+  
+  table tr:nth-child(even){background-color: #f2f2f2;}
+  
+  table tr:hover {background-color: #ddd;}
+  
+  table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: grey;
+    color: white;
+  }

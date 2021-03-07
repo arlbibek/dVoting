@@ -1,17 +1,18 @@
 nav {
   display: flex;
   justify-content: space-around;
-  min-height: 9vh;
+  height: 11vh;
   align-items: center;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   background-color: tomato;
   padding: 10px;
+  position: sticky;
+  top: 0;
 }
 nav .logo {
   font-size: 24px;
   font-weight: bold;
   color: white;
-  background-color: tomato;
 }
 nav .logo:hover {
   cursor: pointer;
@@ -22,7 +23,6 @@ nav .navbar-links {
   width: 34%;
   text-transform: uppercase;
   color: white;
-  transition: 0.25s ease-in-out;
 }
 nav .navbar-links a {
   font-size: 16px;
@@ -41,31 +41,30 @@ nav .burger-menu {
 nav .burger-menu:hover {
   cursor: pointer;
 }
-@media all and (max-width: 1100px) {
+@media all and (max-width: 1300px) {
   nav .burger-menu {
     display: block;
   }
   nav .navbar-links {
     position: absolute;
     display: block;
-    top: 0;
+    top: 100%;
     left: 0;
-    height: 115%;
+    height: 100%;
     width: 184px;
     padding: 0px;
-    background-color: tomato;
-    transform: translate(-600px);
+    transform: translate(-700px);
+    transition: ease-in-out 0.25s;
   }
   nav .navbar-links li {
+    background-color: tomato;
     padding: 14px;
     border-top: 1px solid white;
   }
   nav .navbar-links li:first-of-type {
-    margin-top: 9vh;
     border-top: 0px solid white;
   }
   nav .navbar-links a:hover {
-    color: black;
     border-bottom: 0px;
     cursor: pointer;
   }

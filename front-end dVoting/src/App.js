@@ -1,16 +1,13 @@
 import React from "react";
-import "./App.css";
-
 import NavBar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
-
-import Home from "./pages/Home";
-import Admin from "./pages/Admin";
-import Registration from "./pages/Registration";
-import Voting from "./pages/Voting";
-import Results from "./pages/Results";
-
-import { Route, Link} from "react-router-dom";
+import Home from "./pages/home/Home";
+import Admin from "./pages/admin/Admin";
+import Registration from "./pages/registration/Registration";
+import Voting from "./pages/voting/Voting";
+import Results from "./pages/results/Results";
+import { Route } from "react-router-dom";
+import "./App.css";
 
 function App() {
   return (
@@ -25,5 +22,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

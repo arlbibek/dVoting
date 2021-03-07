@@ -1,0 +1,11 @@
+footer {
+  background-color: blanchedalmond;
+  text-align: center;
+  color: black;
+  width: 100%;
+  height: 7vh;
+  padding: 17px;
+  position: fixed;
+  padding: 10px 10px 0px 10px;
+  bottom: 0;
+}

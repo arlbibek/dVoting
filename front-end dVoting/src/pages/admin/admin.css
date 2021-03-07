@@ -1,0 +1,59 @@
+h3 {
+    text-align: left;
+    margin: 11px;
+}
+.admin-login {
+    /* border: 1px solid black; */
+    width: 100%;
+    background-color: #F2F2F2;
+    border-radius: 7px;
+    padding: 35px;
+    margin-right: auto;
+    margin-left: auto;
+    overflow: auto;
+}
+.admin-register {
+    /* border: 1px solid black; */
+    background-color: #B5F2F7;
+    width: 100%;
+    padding: 25px;
+    margin-right: auto;
+    margin-left: auto;
+    overflow: auto;
+}
+.election-detials {
+    width: 500px;
+    align-items: center;
+    background-color: white;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 17px;
+    margin-bottom: 17px;
+    padding: 25px;
+    border-radius: 7px;
+    display: block;
+}
+form {
+    width: fit-content;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 7px;
+    overflow: auto;
+}
+input {
+    display: inline-block;
+    margin: 17px;
+    margin-top: 3px;
+    padding: 10px;
+}
+label  {
+    display: block;
+    margin-left: 17px;
+    margin-bottom: 3px;
+}
+.admin-button {
+    display: block;
+    margin: 17px;
+    margin-top: 3px;
+    padding: 10px;
+}

@@ -1,0 +1,84 @@
+.results-container{
+    background-color: lightblue;
+    border-radius: 7px;
+    width: 777px;
+    padding: 25px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 17px;
+    margin-bottom: 17px;
+    overflow: auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 7px;
+  }
+  
+  table td, table th {
+    border: 1px solid #ddd;
+    padding: 3px;
+    text-align: center;
+  }
+  
+  table tr:nth-child(even){background-color: #f2f2f2;}
+  
+  table tr:hover {background-color: #ddd;}
+  
+  table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: grey;
+    color: white;
+  }
+
+.winner-container {
+    /* border: 1px solid black; */
+    background-color: #F5FFFA;
+    border-radius: 7px;
+    width: 700px;
+    padding: 25px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 17px;
+    margin-bottom: 17px;
+    overflow: auto;
+}
+.winner-slogan {
+    padding: 7px 7px 7px 1px;
+    color: #CCAB00;
+    font-size: 1.5em;
+    margin: 7px 0px;
+    text-align: justify;
+}
+.winner-info {
+    width: 73%;
+    max-height: 150px;
+    overflow: auto;
+    display:inline-block;
+    margin-right: 1%;
+}
+.winner-votes {
+    width: 25%;
+    padding: 3px;
+    display:inline-block;
+    margin-left: 1%;
+}
+.winner-tag {
+    text-align: left;
+    color: hotpink;
+}
+.votes-tag {
+    text-align: left;
+    color: darkgray;
+}
+.vote-count {
+    margin-top: 11px;
+    padding: 3px;
+    font-size: 57px;
+    overflow-y: auto;
+    text-align: center;
+}

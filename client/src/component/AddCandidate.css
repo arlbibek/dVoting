@@ -1,0 +1,26 @@
+div .addCandidate-form {
+  transition: ease all 0.5s;
+  background-color: #f2f2f2;
+  border-radius: 7px;
+  width: 977px;
+  padding: 17px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 17px;
+  margin-bottom: 17px;
+  overflow: auto;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+label {
+  display: block;
+  margin-left: 17px;
+  margin-bottom: 3px;
+}
+input {
+  display: inline-block;
+  margin: 17px;
+  margin-top: 3px;
+  padding: 10px;
+}

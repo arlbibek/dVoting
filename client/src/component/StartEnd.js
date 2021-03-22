@@ -6,7 +6,7 @@ import NavbarAdmin from "./Navbar/NavigationAdmin";
 import getWeb3 from "../getWeb3";
 import Election from "../contracts/Election.json";
 
-import "./AddCandidate.css";
+import "./StartEnd.css";
 
 export default class StartEnd extends Component {
   constructor(props) {
@@ -16,10 +16,8 @@ export default class StartEnd extends Component {
       web3: null,
       accounts: null,
       isAdmin: false,
-      header: "",
-      slogan: "",
-      candidates: null,
-      candidateCount: undefined,
+      elStarted: false,
+      elEnded: false,
     };
   }
 
@@ -52,16 +50,17 @@ export default class StartEnd extends Component {
         account: accounts[0],
       });
 
-      // Total number of candidates
-      const candidateCount = await this.state.ElectionInstance.methods
-        .getCandidateNumber()
-        .call();
-      this.setState({ candidateCount: candidateCount });
-
+      // Admin info
       const admin = await this.state.ElectionInstance.methods.getAdmin().call();
       if (this.state.account === admin) {
         this.setState({ isAdmin: true });
       }
+
+      // Get election start and end values
+      const start = await this.state.ElectionInstance.methods.getStart().call();
+      this.setState({ elStarted: start });
+      const end = await this.state.ElectionInstance.methods.getEnd().call();
+      this.setState({ elEnded: end });
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -70,18 +69,18 @@ export default class StartEnd extends Component {
       console.error(error);
     }
   };
-  updateHeader = (event) => {
-    this.setState({ header: event.target.value });
-  };
-  updateSlogan = (event) => {
-    this.setState({ slogan: event.target.value });
-  };
 
-  addCandidate = async () => {
+  startElection = async () => {
     await this.state.ElectionInstance.methods
-      .addCandidate(this.state.header, this.state.slogan)
+      .startElection()
       .send({ from: this.state.account, gas: 1000000 });
-    window.location.reload(false);
+    window.location.reload();
+  };
+  endElection = async () => {
+    await this.state.ElectionInstance.methods
+      .endElection()
+      .send({ from: this.state.account, gas: 1000000 });
+    window.location.reload();
   };
 
   render() {
@@ -105,8 +104,42 @@ export default class StartEnd extends Component {
     return (
       <>
         <NavbarAdmin />
-        <h1>Start {"&"} End</h1>
-        <center>Start and End Election</center>
+        <div className="page">
+          <div className="page-header">
+            <center>Start and/or End Election</center>
+          </div>
+          {!this.state.elStarted & !this.state.elEnded ? (
+            <h3>The election have never been initiated.</h3>
+          ) : (
+            <h3>The election was started.</h3>
+          )}
+          <div className="page-content">
+            <div className="start-election">
+              {!this.state.elStarted ? (
+                <button onClick={this.startElection} className="bth-start">
+                  Start {this.state.elEnded ? "Again" : null}
+                </button>
+              ) : (
+                <h2>Election started.</h2>
+              )}
+            </div>
+            {this.state.elStarted ? (
+              <div className="end-election">
+                {!this.state.elEnded ? (
+                  <button onClick={this.endElection} className="bth-end">
+                    End
+                  </button>
+                ) : (
+                  <h2>Election ended.</h2>
+                )}
+              </div>
+            ) : null}
+          </div>
+          <div className="election-status">
+            <p>Started: {this.state.elStarted ? "True" : "False"}</p>
+            <p>Ended: {this.state.elEnded ? "True" : "False"}</p>
+          </div>
+        </div>
       </>
     );
   }

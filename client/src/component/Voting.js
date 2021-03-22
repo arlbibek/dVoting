@@ -16,6 +16,8 @@ export default class Voting extends Component {
       isAdmin: false,
       candidateCount: undefined,
       candidates: null,
+      isElStarted: false,
+      isElEnded: false,
     };
   }
   // refreshing once
@@ -44,17 +46,22 @@ export default class Voting extends Component {
       // example of interacting with the contract's methods.
       this.setState({ web3, ElectionInstance: instance, account: accounts[0] });
 
-      // Total number of candidates
+      // Get total number of candidates
       const candidateCount = await this.state.ElectionInstance.methods
         .getCandidateNumber()
         .call();
       this.setState({ candidateCount: candidateCount });
 
-      // Candidates detials
-      // FIND SOLUTION
-      const candidate = await this.state.ElectionInstance.candidateDetails[0];
-      this.setState({ candidates: candidate });
-      console.log(this.state.candidates);
+      // Get start and end values
+      const start = await this.state.ElectionInstance.methods.getStart().call();
+      this.setState({ isElStarted: start });
+      const end = await this.state.ElectionInstance.methods.getEnd().call();
+      this.setState({ isElEnded: end });
+      // // Candidates detials
+      // // FIND SOLUTION
+      // const candidate = await this.state.ElectionInstance.candidateDetails[0];
+      // this.setState({ candidates: candidate });
+      // console.log(this.state.candidates);
 
       // Admin account and verification
       const admin = await this.state.ElectionInstance.methods.getAdmin().call();
@@ -85,6 +92,11 @@ export default class Voting extends Component {
         <h1>Voting page</h1>
         <center>This is where you cast a vote</center>
         <center>Total Candidates: {this.state.candidateCount}</center>
+        <br />
+        <div>
+          {this.state.isElStarted ? <center>Go Ahead and vote</center> : null}
+        </div>
+        <div>{this.state.isEnded ? <center>Please wait</center> : null}</div>
       </>
     );
   }

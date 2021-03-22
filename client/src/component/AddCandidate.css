@@ -19,8 +19,11 @@ label {
   margin-bottom: 3px;
 }
 input {
-  display: inline-block;
+  display: block;
   margin: 17px;
   margin-top: 3px;
+  padding: 10px;
+}
+.btn-add {
   padding: 10px;
 }

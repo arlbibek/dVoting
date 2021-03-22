@@ -54,8 +54,8 @@ contract Election {
         candidateCount += 1;
     }
 
-    // get total number of candidates
     function getCandidateNumber() public view returns (uint256) {
+        // get total number of candidates
         return candidateCount;
     }
 
@@ -94,6 +94,7 @@ contract Election {
         candidateDetails[candidateId].voteCount += 1;
         voterDetails[msg.sender].hasVoted = true;
     }
+
     // election start/end
     function startElection() public onlyAdmin {
         start = true;

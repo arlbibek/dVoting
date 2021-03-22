@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import Navbar from "./Navigation";
-import NavbarAdmin from "./NavigationAdmin";
+import Navbar from "./Navbar/Navigation";
+import NavbarAdmin from "./Navbar/NavigationAdmin";
 
 import getWeb3 from "../getWeb3";
 import Election from "../contracts/Election.json";
@@ -63,13 +63,30 @@ export default class Home extends Component {
         </>
       );
     }
-    return (
-      <>
-        {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-        <h1>Home Page</h1>
-        <center>This is home page</center>
-        <center>{this.state.isAdmin ? "Admin" : "Not Admin"}</center>
-      </>
-    );
+    if (this.state.isAdmin) {
+      return <AdminHome />;
+    }
+    return <UserHome />;
   }
 }
+
+const UserHome = () => {
+  // Contains of Home page for the user
+  return (
+    <>
+      <Navbar />
+      <h1>User home page</h1>
+      <center>This is home page for user</center>
+    </>
+  );
+};
+const AdminHome = () => {
+  // Contains of Home page for the Admin
+  return (
+    <>
+      <NavbarAdmin />
+      <h1>Admin home page</h1>
+      <center>This is home page for Admin</center>
+    </>
+  );
+};

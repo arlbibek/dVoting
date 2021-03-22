@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 
-import Navbar from "./Navigation";
-import NavbarAdmin from "./NavigationAdmin";
+import Navbar from "./Navbar/Navigation";
+import NavbarAdmin from "./Navbar/NavigationAdmin";
 
 import getWeb3 from "../getWeb3";
 import Election from "../contracts/Election.json";
 
-import { FormGroup, FormControl, Button, Form } from "react-bootstrap";
+import { FormGroup, FormControl, Button } from "react-bootstrap";
 
 import "./AddCandidate.css";
 
@@ -14,13 +14,14 @@ export default class AddCandidate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      electionContract: undefined,
+      ElectionInstance: undefined,
       web3: null,
       accounts: null,
       isAdmin: false,
       header: "",
       slogan: "",
       candidates: null,
+      candidateCount: undefined,
     };
   }
 
@@ -41,7 +42,7 @@ export default class AddCandidate extends Component {
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Election.networks[networkId];
-      const electionInstance = new web3.eth.Contract(
+      const instance = new web3.eth.Contract(
         Election.abi,
         deployedNetwork && deployedNetwork.address
       );
@@ -49,11 +50,17 @@ export default class AddCandidate extends Component {
       // example of interacting with the contract's methods.
       this.setState({
         web3: web3,
-        electionContract: electionInstance,
+        ElectionInstance: instance,
         account: accounts[0],
       });
 
-      const admin = await this.state.electionContract.methods.getAdmin().call();
+      // Total number of candidates
+      const candidateCount = await this.state.ElectionInstance.methods
+        .getCandidateNumber()
+        .call();
+      this.setState({ candidateCount: candidateCount });
+
+      const admin = await this.state.ElectionInstance.methods.getAdmin().call();
       if (this.state.account === admin) {
         this.setState({ isAdmin: true });
       }
@@ -73,7 +80,7 @@ export default class AddCandidate extends Component {
   };
 
   addCandidate = async () => {
-    await this.state.electionContract.methods
+    await this.state.ElectionInstance.methods
       .addCandidate(this.state.header, this.state.slogan)
       .send({ from: this.state.account, gas: 1000000 });
     window.location.reload(false);
@@ -91,16 +98,18 @@ export default class AddCandidate extends Component {
     if (!this.state.isAdmin) {
       return (
         <>
-          {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-          <center>Admin Access Only...</center>
+          <Navbar />
+          <h1>Add Candidate Page</h1>
+          <center>Admin Access Only!</center>
         </>
       );
     }
     return (
       <>
-        {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
+        <NavbarAdmin />
         <h1>Add Candidate page</h1>
         <center>This is where you add new candidate</center>
+        <center>Total Candidates: {this.state.candidateCount}</center>
         <div className="addCandidate-form">
           <FormGroup>
             <label>Candidate Name</label>
@@ -118,7 +127,9 @@ export default class AddCandidate extends Component {
               onChange={this.updateSlogan}
             />
           </FormGroup>
-          <Button onClick={this.addCandidate}>Add</Button>
+          <Button className="btn-add" onClick={this.addCandidate}>
+            Add
+          </Button>
         </div>
       </>
     );

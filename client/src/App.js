@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import AddCandidate from "./component/AddCandidate";
 import Home from "./component/Home";
 import Voting from "./component/Voting";
+import Results from "./component/Results";
+import Registration from "./component/Registration";
+import Verification from "./component/Verification";
+import StartEnd from "./component/StartEnd";
 
 import "./App.css";
 
@@ -16,6 +20,10 @@ export default class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/AddCandidate" component={AddCandidate} />
             <Route exact path="/Voting" component={Voting} />
+            <Route exact path="/Results" component={Results} />
+            <Route exact path="/Registration" component={Registration} />
+            <Route exact path="/Verification" component={Verification} />
+            <Route exact path="/StartEnd" component={StartEnd} />
             <Route exact path="*" component={NotFound} />
           </Switch>
         </Router>
@@ -23,13 +31,19 @@ export default class App extends Component {
     );
   }
 }
-
 class NotFound extends Component {
   render() {
     return (
       <>
         <h1>404 NOT FOUND!</h1>
-        <center>The page your are looking for doesn't exists.</center>
+        <center>
+          The page your are looking for doesn't exist.
+          <br />
+          Go to{" "}
+          <Link to="/" style={{ color: "black", textDecoration: "underline" }}>
+            Home
+          </Link>
+        </center>
       </>
     );
   }

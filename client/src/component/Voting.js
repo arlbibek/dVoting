@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import Navbar from "./Navigation";
-import NavbarAdmin from "./NavigationAdmin";
+import Navbar from "./Navbar/Navigation";
+import NavbarAdmin from "./Navbar/NavigationAdmin";
 
 import getWeb3 from "../getWeb3";
 import Election from "../contracts/Election.json";
@@ -14,6 +14,8 @@ export default class Voting extends Component {
       account: null,
       web3: null,
       isAdmin: false,
+      candidateCount: undefined,
+      candidates: null,
     };
   }
   // refreshing once
@@ -42,6 +44,19 @@ export default class Voting extends Component {
       // example of interacting with the contract's methods.
       this.setState({ web3, ElectionInstance: instance, account: accounts[0] });
 
+      // Total number of candidates
+      const candidateCount = await this.state.ElectionInstance.methods
+        .getCandidateNumber()
+        .call();
+      this.setState({ candidateCount: candidateCount });
+
+      // Candidates detials
+      // FIND SOLUTION
+      const candidate = await this.state.ElectionInstance.candidateDetails[0];
+      this.setState({ candidates: candidate });
+      console.log(this.state.candidates);
+
+      // Admin account and verification
       const admin = await this.state.ElectionInstance.methods.getAdmin().call();
       if (this.state.account === admin) {
         this.setState({ isAdmin: true });
@@ -63,11 +78,13 @@ export default class Voting extends Component {
         </>
       );
     }
+
     return (
       <>
         {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
         <h1>Voting page</h1>
         <center>This is where you cast a vote</center>
+        <center>Total Candidates: {this.state.candidateCount}</center>
       </>
     );
   }

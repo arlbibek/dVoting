@@ -5,6 +5,7 @@ import NavbarAdmin from "./Navbar/NavigationAdmin";
 
 import getWeb3 from "../getWeb3";
 import Election from "../contracts/Election.json";
+import { Link } from "react-router-dom";
 
 export default class Voting extends Component {
   constructor(props) {
@@ -94,9 +95,39 @@ export default class Voting extends Component {
         <center>Total Candidates: {this.state.candidateCount}</center>
         <br />
         <div>
-          {this.state.isElStarted ? <center>Go Ahead and vote</center> : null}
+          {!this.state.isElStarted && !this.state.isElEnded ? (
+            <>
+              <h3>The election has never been initialize.</h3>
+              <center>
+                <p>Please Wait..</p>
+              </center>
+            </>
+          ) : this.state.isElStarted && !this.state.isElEnded ? (
+            <>
+              <h3>Go ahead and cast your vote.</h3>
+              <center>
+                <h1>Voter list</h1>
+                <ul>Candidate 1</ul>
+                <ul>Candidate 2</ul>
+                <ul>Candidate 3</ul>
+                <ul>Candidate 4</ul>
+              </center>
+            </>
+          ) : !this.state.isElStarted && this.state.isElEnded ? (
+            <>
+              <h3>The Election ended.</h3>
+              <br />
+              <center>
+                <Link
+                  to="/Results"
+                  style={{ color: "black", textDecoration: "underline" }}
+                >
+                  See results
+                </Link>
+              </center>
+            </>
+          ) : null}
         </div>
-        <div>{this.state.isEnded ? <center>Please wait</center> : null}</div>
       </>
     );
   }

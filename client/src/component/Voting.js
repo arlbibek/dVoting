@@ -7,6 +7,8 @@ import getWeb3 from "../getWeb3";
 import Election from "../contracts/Election.json";
 import { Link } from "react-router-dom";
 
+import "./Voting.css";
+
 export default class Voting extends Component {
   constructor(props) {
     super(props);
@@ -16,14 +18,13 @@ export default class Voting extends Component {
       web3: null,
       isAdmin: false,
       candidateCount: undefined,
-      candidates: null,
+      candidates: [],
       isElStarted: false,
       isElEnded: false,
     };
   }
-  // refreshing once
-
   componentDidMount = async () => {
+    // refreshing once
     if (!window.location.hash) {
       window.location = window.location + "#loaded";
       window.location.reload();
@@ -58,11 +59,21 @@ export default class Voting extends Component {
       this.setState({ isElStarted: start });
       const end = await this.state.ElectionInstance.methods.getEnd().call();
       this.setState({ isElEnded: end });
-      // // Candidates detials
-      // // FIND SOLUTION
-      // const candidate = await this.state.ElectionInstance.candidateDetails[0];
-      // this.setState({ candidates: candidate });
-      // console.log(this.state.candidates);
+
+      // Loadin Candidates detials
+      for (let i = 1; i <= this.state.candidateCount; i++) {
+        const candidate = await this.state.ElectionInstance.methods
+          .candidateDetails(i - 1)
+          .call();
+        this.state.candidates.push({
+          id: candidate.candidateId,
+          header: candidate.header,
+          slogan: candidate.slogan,
+        });
+      }
+
+      this.setState({ candidates: this.state.candidates });
+      console.log(this.state.candidates);
 
       // Admin account and verification
       const admin = await this.state.ElectionInstance.methods.getAdmin().call();
@@ -90,8 +101,6 @@ export default class Voting extends Component {
     return (
       <>
         {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-        <h1>Voting page</h1>
-        <center>This is where you cast a vote</center>
         <center>Total Candidates: {this.state.candidateCount}</center>
         <br />
         <div>
@@ -105,13 +114,8 @@ export default class Voting extends Component {
           ) : this.state.isElStarted && !this.state.isElEnded ? (
             <>
               <h3>Go ahead and cast your vote.</h3>
-              <center>
-                <h1>Voter list</h1>
-                <ul>Candidate 1</ul>
-                <ul>Candidate 2</ul>
-                <ul>Candidate 3</ul>
-                <ul>Candidate 4</ul>
-              </center>
+              {voteCandidates(this.state.candidates)}
+              {/* {voteCandidates(candidatesData)} */}
             </>
           ) : !this.state.isElStarted && this.state.isElEnded ? (
             <>
@@ -131,4 +135,42 @@ export default class Voting extends Component {
       </>
     );
   }
+}
+export function voteCandidates(candidates) {
+  const confirmVote = (id, header) => {
+    var r = window.confirm("Vote for " + header + "\nAre you sure?");
+    if (r === true) {
+      alert("You've Voted for " + header + " #" + id);
+    }
+  };
+
+  const renderCandidates = (candidates) => {
+    return (
+      <div className="candidate-container">
+        <div className="candidate-info">
+          <h2>
+            {candidates.header} <small>#{candidates.id}</small>
+          </h2>
+          {/* <p className="contact">{candidates.contact}</p> */}
+          <p className="slogan">{candidates.slogan}</p>
+          {/* <p className="discription">{candidates.discription}</p> */}
+        </div>
+        <div class="vote-btn-container">
+          <button
+            type="button"
+            className="vote-btn"
+            onClick={() => confirmVote(candidates.id, candidates.header)}
+          >
+            Vote
+          </button>
+        </div>
+      </div>
+    );
+  };
+  return (
+    <div className="all-candidates">
+      <h2>Candidates</h2>
+      {candidates.map(renderCandidates)}
+    </div>
+  );
 }

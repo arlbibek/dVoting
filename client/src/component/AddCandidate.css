@@ -1,4 +1,11 @@
-div .addCandidate-form {
+.add-candidate {
+  background-color: none;
+  padding: 3%;
+  margin-left: auto;
+  margin-right: auto;
+  width: max-content;
+}
+.add-candidate-form {
   transition: ease all 0.5s;
   background-color: #f2f2f2;
   border-radius: 7px;
@@ -13,17 +20,63 @@ div .addCandidate-form {
   justify-content: center;
   display: flex;
 }
+form {
+  width: fit-content;
+  margin-right: auto;
+  margin-left: auto;
+  overflow: auto;
+  margin: 5px;
+  padding: 7px;
+}
+input,
+label,
+button {
+  margin-left: 7px;
+  margin-right: 7px;
+}
+input,
 label {
   display: block;
-  margin-left: 17px;
-  margin-bottom: 3px;
+  margin-bottom: 11px;
+  width: 333px;
 }
-input {
-  display: block;
-  margin: 17px;
-  margin-top: 3px;
-  padding: 10px;
+input,
+button {
+  padding: 11px;
 }
-.btn-add {
-  padding: 10px;
+button {
+  width: 25%;
+  float: inline-end;
+}
+@media all and (max-width: 900px) {
+  .add-candidate-form {
+    width: 800px;
+  }
+}
+@media all and (max-width: 850px) {
+  .add-candidate-form {
+    width: 700px;
+  }
+}
+@media all and (max-width: 750px) {
+  .add-candidate-form {
+    width: 600px;
+  }
+}
+@media all and (max-width: 650px) {
+  .add-candidate-form {
+    width: 400px;
+    display: block;
+  }
+  input,
+  label,
+  button {
+    width: 100%;
+    float: inline-start;
+  }
+}
+@media all and (max-width: 400px) {
+  .add-candidate-form {
+    width: 300px;
+  }
 }

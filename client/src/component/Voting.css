@@ -1,0 +1,117 @@
+h2,
+h3 {
+  padding: 11px 1px;
+  margin: auto;
+  text-align: left;
+}
+small {
+  color: grey;
+  font-size: medium;
+}
+p {
+  margin: 1px;
+  padding: 3px;
+}
+.all-candidates {
+  background-color: none;
+  padding: 3%;
+  margin-left: auto;
+  margin-right: auto;
+  width: max-content;
+}
+.contact {
+  color: grey;
+}
+.slogan {
+  color: #ccab00;
+  font-size: 1.5em;
+  margin: 7px 0px;
+}
+.discription {
+  padding: 11px;
+  padding-left: 1px;
+  text-align: justify;
+  max-height: 111px;
+  overflow: auto;
+  line-height: 1.5em;
+}
+
+.candidate-container {
+  transition: ease all 0.5s;
+  background-color: #f2f2f2;
+  border-radius: 7px;
+  width: 977px;
+  padding: 17px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 17px;
+  margin-bottom: 17px;
+  overflow: auto;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+.candidate-info {
+  transition: ease all 0.5s;
+  width: 91%;
+  float: left;
+  margin-left: 1%;
+  padding: 17px;
+  background-color: #e5e5e5;
+  border-radius: 11px;
+}
+.vote-btn-container {
+  transition: ease all 0.5s;
+  height: 100%;
+  width: 17%;
+  float: right;
+  align-items: center;
+  justify-content: center;
+  padding: 17px;
+}
+.vote-btn {
+  width: 100%;
+  height: 55px;
+  font-size: 157%;
+}
+@media all and (max-width: 1020px) {
+  /* * {display: none;} */
+  .candidate-container {
+    width: 777px;
+  }
+}
+@media all and (max-width: 900px) {
+  /* * {display: none;} */
+  .candidate-container {
+    width: 800px;
+    display: block;
+  }
+  .candidate-info,
+  .vote-btn-container {
+    width: 100%;
+    height: 100%;
+  }
+}
+@media all and (max-width: 850px) {
+  /* * {display: none;} */
+  .candidate-container {
+    width: 700px;
+  }
+}
+@media all and (max-width: 750px) {
+  /* * {display: none;} */
+  .candidate-container {
+    width: 600px;
+  }
+}
+@media all and (max-width: 650px) {
+  /* * {display: none;} */
+  .candidate-container {
+    width: 400px;
+  }
+}
+@media all and (max-width: 400px) {
+  .candidate-container {
+    width: 300px;
+  }
+}

@@ -6,8 +6,6 @@ import NavbarAdmin from "./Navbar/NavigationAdmin";
 import getWeb3 from "../getWeb3";
 import Election from "../contracts/Election.json";
 
-import { FormGroup, FormControl, Button } from "react-bootstrap";
-
 import "./AddCandidate.css";
 
 export default class AddCandidate extends Component {
@@ -107,29 +105,35 @@ export default class AddCandidate extends Component {
     return (
       <>
         <NavbarAdmin />
-        <h1>Add Candidate page</h1>
-        <center>This is where you add new candidate</center>
         <center>Total Candidates: {this.state.candidateCount}</center>
-        <div className="addCandidate-form">
-          <FormGroup>
-            <label>Candidate Name</label>
-            <FormControl
-              input="text"
-              value={this.state.header}
-              onChange={this.updateHeader}
-            />
-          </FormGroup>
-          <FormGroup>
-            <label>Slogan</label>
-            <FormControl
-              input="text"
-              value={this.state.slogan}
-              onChange={this.updateSlogan}
-            />
-          </FormGroup>
-          <Button className="btn-add" onClick={this.addCandidate}>
-            Add
-          </Button>
+        <div className="add-candidate">
+          <h2>Add a new candidate</h2>
+          <div className="add-candidate-form">
+            <form>
+              <label>Header</label>
+              <input
+                type="text"
+                placeholder="eg. Marcus"
+                value={this.state.header}
+                onChange={this.updateHeader}
+                style={{ width: "157px" }}
+              />
+              <label>Slogan</label>
+              <input
+                type="text"
+                placeholder="eg. It is what it is"
+                value={this.state.slogan}
+                onChange={this.updateSlogan}
+              />
+              <button
+                onClick={this.addCandidate}
+                // disabled={!false}
+                disabled={this.state.header.length < 3}
+              >
+                Add
+              </button>
+            </form>
+          </div>
         </div>
       </>
     );

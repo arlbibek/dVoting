@@ -8,7 +8,6 @@ contract Election {
     bool start;
     bool end;
 
-    // Constructor
     constructor() public {
         // Initilizing default values
         admin = msg.sender;
@@ -19,12 +18,12 @@ contract Election {
     }
 
     function getAdmin() public view returns (address) {
-        // Returns address of the admin (i.e. account which was used to deploy contract)
+        // Returns account address used to deploy contract (i.e. admin)
         return admin;
     }
 
     modifier onlyAdmin() {
-        // Allowing only admin can access
+        // modifier for only admin access
         require(msg.sender == admin);
         _;
     }
@@ -37,7 +36,6 @@ contract Election {
     }
     mapping(uint256 => Candidate) public candidateDetails;
 
-    // function to add candidates
     function addCandidate(string memory _header, string memory _slogan)
         public
         // Only admin can add
@@ -45,7 +43,7 @@ contract Election {
     {
         Candidate memory newCandidate =
             Candidate({
-                candidateId: candidateCount,
+                candidateId: candidateCount + 1,
                 header: _header,
                 slogan: _slogan,
                 voteCount: 0
@@ -55,7 +53,7 @@ contract Election {
     }
 
     function getCandidateNumber() public view returns (uint256) {
-        // get total number of candidates
+        // Returns total number of candidates
         return candidateCount;
     }
 
@@ -64,14 +62,14 @@ contract Election {
         address voterAddress;
         string name;
         string phone;
-        bool hasVoted;
         bool isVerified;
+        bool hasVoted;
     }
 
     address[] public voters; // Array of address to store address of voters
     mapping(address => Voter) public voterDetails;
 
-    // request to be added as voter
+    // Request to be added as voter
     function requestVoter(string memory _name, string memory _phone) public {
         Voter memory newVoter =
             Voter({
@@ -95,19 +93,20 @@ contract Election {
         voterDetails[msg.sender].hasVoted = true;
     }
 
-    // election start/end
+    // Start election
     function startElection() public onlyAdmin {
         start = true;
         end = false;
     }
 
+    function getStart() public view returns (bool) {
+        return start;
+    }
+
+    // End election
     function endElection() public onlyAdmin {
         end = true;
         start = false;
-    }
-
-    function getStart() public view returns (bool) {
-        return start;
     }
 
     function getEnd() public view returns (bool) {

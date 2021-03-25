@@ -67,13 +67,13 @@ A decentralized voting system based on Ethereum blockchain technology for corpor
 
    > Note: Use `truffle migrate --reset` for redeployments
 
-### Launch the development server (fronted)
+1. Launch the development server (fronted)
 
-```shell
-cd client
-npm install
-npm start
-```
+   ```shell
+   cd client
+   npm install
+   npm start
+   ```
 
 ---
 

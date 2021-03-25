@@ -101,34 +101,37 @@ export default class Voting extends Component {
     return (
       <>
         {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-        <center>Total Candidates: {this.state.candidateCount}</center>
-        <br />
         <div>
           {!this.state.isElStarted && !this.state.isElEnded ? (
             <>
-              <h3>The election has never been initialize.</h3>
-              <center>
-                <p>Please Wait..</p>
-              </center>
+              <div className="container-item info">
+                <center>
+                  <h3>The election has never been initialize.</h3>
+                  <p>Please Wait..</p>
+                </center>
+              </div>
             </>
           ) : this.state.isElStarted && !this.state.isElEnded ? (
             <>
-              <h3>Go ahead and cast your vote.</h3>
+              <div className="container-item info">
+                <center>Go ahead and cast your vote.</center>
+              </div>
               {voteCandidates(this.state.candidates)}
-              {/* {voteCandidates(candidatesData)} */}
             </>
           ) : !this.state.isElStarted && this.state.isElEnded ? (
             <>
-              <h3>The Election ended.</h3>
-              <br />
-              <center>
-                <Link
-                  to="/Results"
-                  style={{ color: "black", textDecoration: "underline" }}
-                >
-                  See results
-                </Link>
-              </center>
+              <div className="container-item attention">
+                <center>
+                  <h3>The Election ended.</h3>
+                  <br />
+                  <Link
+                    to="/Results"
+                    style={{ color: "black", textDecoration: "underline" }}
+                  >
+                    See results
+                  </Link>
+                </center>
+              </div>
             </>
           ) : null}
         </div>
@@ -138,28 +141,29 @@ export default class Voting extends Component {
 }
 export function voteCandidates(candidates) {
   const confirmVote = (id, header) => {
-    var r = window.confirm("Vote for " + header + "\nAre you sure?");
+    var r = window.confirm(
+      "Vote for " + header + " with Id " + id + ".\nAre you sure?"
+    );
     if (r === true) {
       alert("You've Voted for " + header + " #" + id);
     }
   };
 
-  const renderCandidates = (candidates) => {
+  const renderCandidates = (candidate) => {
     return (
-      <div className="candidate-container">
+      <div className="container-item">
         <div className="candidate-info">
           <h2>
-            {candidates.header} <small>#{candidates.id}</small>
+            {candidate.header} <small>#{candidate.id}</small>
           </h2>
-          {/* <p className="contact">{candidates.contact}</p> */}
-          <p className="slogan">{candidates.slogan}</p>
-          {/* <p className="discription">{candidates.discription}</p> */}
+          {/* <p className="contact">{candidate.contact}</p> */}
+          <p className="slogan">{candidate.slogan}</p>
+          {/* <p className="discription">{candidate.discription}</p> */}
         </div>
-        <div class="vote-btn-container">
+        <div className="vote-btn-container">
           <button
-            type="button"
-            className="vote-btn"
-            onClick={() => confirmVote(candidates.id, candidates.header)}
+            onClick={() => confirmVote(candidate.id, candidate.header)}
+            className="vote-bth"
           >
             Vote
           </button>
@@ -168,9 +172,21 @@ export function voteCandidates(candidates) {
     );
   };
   return (
-    <div className="all-candidates">
+    <div className="container-main">
       <h2>Candidates</h2>
-      {candidates.map(renderCandidates)}
+      <small>Total candidates: {candidates.length}</small>
+      {candidates.length < 1 ? (
+        <div className="container-item attention">
+          <center>Not one to vote for.</center>
+        </div>
+      ) : (
+        <>
+          {candidates.map(renderCandidates)}
+          <div className="container-item" style={{ border: "1px solid black" }}>
+            <center>That is all.</center>
+          </div>
+        </>
+      )}
     </div>
   );
 }

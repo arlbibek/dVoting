@@ -1,54 +1,16 @@
-h3 {
-  padding: 7px;
-  margin: 11px;
-  text-align: center;
-}
-.bth-start,
-.bth-end {
+.start-btn {
   display: block;
-  padding: 11px;
-  margin: 17px;
-  width: 111px;
-  text-align: center;
-}
-.page-header {
-  margin-top: 17px;
-  margin-bottom: 17px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 11px;
-  width: 977px;
-}
-.page-content {
-  padding: 11px;
+  padding: 21px;
   margin: 7px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 777px;
-  border-radius: 0.5em;
-  overflow: auto;
-  align-items: center;
-  justify-content: center;
-  display: block;
-  background-color: whitesmoke;
-}
-.start-election,
-.end-election {
-  padding: 11px;
-  margin: 17px;
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 0.5em;
-  overflow: auto;
-  align-items: center;
-  justify-content: center;
-  display: flex;
+  min-width: max-content;
+  text-align: center;
+  width: 333px;
+  align-self: center;
 }
 .election-status {
   padding: 11px;
-  margin: 25px;
-  width: 75%;
+  margin: 7px;
+  width: 100%;
   border: 1px solid tomato;
   margin-left: auto;
   margin-right: auto;

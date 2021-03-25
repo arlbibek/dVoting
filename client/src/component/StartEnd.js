@@ -96,45 +96,51 @@ export default class StartEnd extends Component {
       return (
         <>
           <Navbar />
-          <h1>Start {"&"} End</h1>
-          <center>Admin Access Only!</center>
+          <div className="container-item attention">
+            <p>Admin Access Only!</p>
+          </div>
         </>
       );
     }
     return (
       <>
         <NavbarAdmin />
-        <div className="page">
-          <div className="page-header">
-            <center>Start and/or End Election</center>
+        {!this.state.elStarted & !this.state.elEnded ? (
+          <div className="container-item info">
+            <center>The election have never been initiated.</center>
           </div>
-          {!this.state.elStarted & !this.state.elEnded ? (
-            <h3>The election have never been initiated.</h3>
-          ) : (
-            <h3>The election was started.</h3>
-          )}
-          <div className="page-content">
-            <div className="start-election">
-              {!this.state.elStarted ? (
-                <button onClick={this.startElection} className="bth-start">
+        ) : null}
+        <div className="container-main">
+          <h3>Start or end election</h3>
+          {!this.state.elStarted ? (
+            <>
+              <div className="container-item">
+                <button onClick={this.startElection} className="start-btn">
                   Start {this.state.elEnded ? "Again" : null}
                 </button>
-              ) : (
-                <h2>Election started.</h2>
-              )}
-            </div>
-            {this.state.elStarted ? (
-              <div className="end-election">
-                {!this.state.elEnded ? (
-                  <button onClick={this.endElection} className="bth-end">
-                    End
-                  </button>
-                ) : (
-                  <h2>Election ended.</h2>
-                )}
               </div>
-            ) : null}
-          </div>
+              {this.state.elEnded ? (
+                <div className="container-item">
+                  <center>
+                    <p>The election ended.</p>
+                  </center>
+                </div>
+              ) : null}
+            </>
+          ) : (
+            <>
+              <div className="container-item">
+                <center>
+                  <p>The election started.</p>
+                </center>
+              </div>
+              <div className="container-item">
+                <button onClick={this.endElection} className="start-btn">
+                  End
+                </button>
+              </div>
+            </>
+          )}
           <div className="election-status">
             <p>Started: {this.state.elStarted ? "True" : "False"}</p>
             <p>Ended: {this.state.elEnded ? "True" : "False"}</p>

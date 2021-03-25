@@ -18,7 +18,7 @@ export default class AddCandidate extends Component {
       isAdmin: false,
       header: "",
       slogan: "",
-      candidates: null,
+      candidates: [],
       candidateCount: undefined,
     };
   }
@@ -62,6 +62,19 @@ export default class AddCandidate extends Component {
       if (this.state.account === admin) {
         this.setState({ isAdmin: true });
       }
+
+      // Loadin Candidates detials
+      for (let i = 1; i <= this.state.candidateCount; i++) {
+        const candidate = await this.state.ElectionInstance.methods
+          .candidateDetails(i - 1)
+          .call();
+        this.state.candidates.push({
+          id: candidate.candidateId,
+          header: candidate.header,
+        });
+      }
+
+      this.setState({ candidates: this.state.candidates });
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -105,10 +118,10 @@ export default class AddCandidate extends Component {
     return (
       <>
         <NavbarAdmin />
-        <center>Total Candidates: {this.state.candidateCount}</center>
-        <div className="add-candidate">
+        <div className="container-main">
           <h2>Add a new candidate</h2>
-          <div className="add-candidate-form">
+          <small>Total candidates: {this.state.candidateCount}</small>
+          <div className="container-item">
             <form>
               <label>Header</label>
               <input
@@ -126,16 +139,41 @@ export default class AddCandidate extends Component {
                 onChange={this.updateSlogan}
               />
               <button
-                onClick={this.addCandidate}
-                // disabled={!false}
+                className="btn-add"
                 disabled={this.state.header.length < 3}
+                disabled={this.state.header.length > 21}
+                onClick={this.addCandidate}
               >
                 Add
               </button>
             </form>
           </div>
+          {loadAdded(this.state.candidates)}
         </div>
       </>
     );
   }
+}
+export function loadAdded(candidates) {
+  const renderAdded = (candidate) => {
+    return (
+      <>
+        <div className="container-list success">
+          {candidate.id}. {candidate.header}
+        </div>
+      </>
+    );
+  };
+  return (
+    <div className="container-main">
+      <h2>Candidates List</h2>
+      {candidates.length < 1 ? (
+        <div className="container-item">
+          <center>No candidates added.</center>
+        </div>
+      ) : (
+        candidates.map(renderAdded)
+      )}
+    </div>
+  );
 }

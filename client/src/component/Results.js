@@ -100,30 +100,36 @@ export default class Result extends Component {
     return (
       <>
         {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-        <center>Total Candidates: {this.state.candidateCount}</center>
         <br />
         <div>
           {!this.state.isElStarted && !this.state.isElEnded ? (
             <>
-              <h3>The election has never been initialize.</h3>
-              <center>
-                <p>Please Wait..</p>
-              </center>
+              <div className="container-item info">
+                <center>
+                  <h3>The election has never been initialize.</h3>
+                  <p>Please Wait..</p>
+                </center>
+              </div>
             </>
           ) : this.state.isElStarted && !this.state.isElEnded ? (
             <>
-              <h3>The election is being conducted at the movement.</h3>
-              <center>
-                <p>Result will be displayed once the election has ended.</p>
-                <p>Go ahead and cast your vote (if you've not already).</p>
-                <Link to="/Voting">Voting Page</Link>
-              </center>
+              <div className="container-item attention">
+                <center>
+                  <h3>The election is being conducted at the movement.</h3>
+                  <p>Result will be displayed once the election has ended.</p>
+                  <p>Go ahead and cast your vote.</p>
+                  <br />
+                  <Link
+                    to="/Voting"
+                    style={{ color: "black", textDecoration: "underline" }}
+                  >
+                    Voting Page
+                  </Link>
+                </center>
+              </div>
             </>
           ) : !this.state.isElStarted && this.state.isElEnded ? (
-            <>
-              {/* <h3>The Election ended.</h3> */}
-              {displayResults(this.state.candidates)}
-            </>
+            displayResults(this.state.candidates)
           ) : null}
         </div>
       </>
@@ -142,18 +148,42 @@ export function displayResults(candidates) {
     );
   };
   return (
-    <div className="results">
-      <h2>Results</h2>
-      <div className="results-container">
-        <table>
-          <tr>
-            <th>Id</th>
-            <th>Candidate</th>
-            <th>Votes</th>
-          </tr>
-          {candidates.map(renderResults)}
-        </table>
+    <>
+      {candidates.length > 0 ? (
+        <div className="container-item info">
+          <center>
+            <p>Here are all the results.</p>
+          </center>
+        </div>
+      ) : null}
+      <div className="container-main">
+        <h2>Results</h2>
+        <small>Total candidates: {candidates.length}</small>
+        {candidates.length < 1 ? (
+          <div className="container-item attention">
+            <center>No candidates.</center>
+          </div>
+        ) : (
+          <>
+            <div className="container-item">
+              <table>
+                <tr>
+                  <th>Id</th>
+                  <th>Candidate</th>
+                  <th>Votes</th>
+                </tr>
+                {candidates.map(renderResults)}
+              </table>
+            </div>
+            <div
+              className="container-item"
+              style={{ border: "1px solid black" }}
+            >
+              <center>That is all.</center>
+            </div>
+          </>
+        )}
       </div>
-    </div>
+    </>
   );
 }

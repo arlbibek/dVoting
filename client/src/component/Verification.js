@@ -14,7 +14,8 @@ export default class Registration extends Component {
       account: null,
       web3: null,
       isAdmin: false,
-      candidateCount: undefined,
+      voterCount: undefined,
+      voters: [],
     };
   }
   // refreshing once
@@ -45,7 +46,7 @@ export default class Registration extends Component {
 
       // Total number of candidates
       const candidateCount = await this.state.ElectionInstance.methods
-        .getCandidateNumber()
+        .getTotalCandidate()
         .call();
       this.setState({ candidateCount: candidateCount });
 
@@ -54,6 +55,30 @@ export default class Registration extends Component {
       if (this.state.account === admin) {
         this.setState({ isAdmin: true });
       }
+      // Total number of voters
+      const voterCount = await this.state.ElectionInstance.methods
+        .getTotalVoter()
+        .call();
+      this.setState({ voterCount: voterCount });
+      // Loading all the voters
+      for (let i = 0; i < this.state.voterCount; i++) {
+        const voterAddress = await this.state.ElectionInstance.methods
+          .voters(i)
+          .call();
+        const voter = await this.state.ElectionInstance.methods
+          .voterDetails(voterAddress)
+          .call();
+        this.state.voters.push({
+          address: voter.voterAddress,
+          name: voter.name,
+          phone: voter.phone,
+          hasVoted: voter.hasVoted,
+          isVerified: voter.isVerified,
+          isRegistered: voter.isRegistered,
+        });
+      }
+      this.setState({ voters: this.state.voters });
+      console.log(this.state.voters);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -83,9 +108,62 @@ export default class Registration extends Component {
     return (
       <>
         <NavbarAdmin />
-        <h1>Verification page</h1>
-        <center>This is where admin verifies a voter</center>
+        <div className="container-main">
+          {this.state.isAdmin ? (
+            <>
+              <h3>Verification</h3>
+              <small>TotalVoters: {this.state.voters.length}</small>
+              {loadAllVoters(this.state.voters)}
+            </>
+          ) : null}
+        </div>
       </>
     );
   }
+}
+
+export function loadAllVoters(voters) {
+  const renderAllVoters = (voter) => {
+    return (
+      <>
+        <div className="container-list success">
+          <table>
+            <tr>
+              <th>Account address</th>
+              <td>{voter.address}</td>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <td>{voter.name}</td>
+            </tr>
+            <tr>
+              <th>Phone</th>
+              <td>{voter.phone}</td>
+            </tr>
+            <tr>
+              <th>Voted</th>
+              <td>{voter.hasVoted ? "True" : "False"}</td>
+            </tr>
+            <tr>
+              <th>Verified</th>
+              <td>{voter.isVerified ? "True" : "False"}</td>
+            </tr>
+            <tr>
+              <th>Registred</th>
+              <td>{voter.isRegistered ? "True" : "False"}</td>
+            </tr>
+          </table>
+          <button>Verify</button>
+        </div>
+      </>
+    );
+  };
+  return (
+    <>
+      <div className="container-item success">
+        <center>List of voters</center>
+      </div>
+      {voters.map(renderAllVoters)}
+    </>
+  );
 }

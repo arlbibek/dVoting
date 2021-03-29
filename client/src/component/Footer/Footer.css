@@ -1,0 +1,38 @@
+.footer,
+.footer-block {
+  padding: 11px;
+  height: 40px;
+  width: 100%;
+  overflow: auto;
+}
+.footer {
+  background-color: beige;
+  border-top: 1px solid #e7e7e7;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  overflow: auto;
+}
+.footer-block {
+  display: block;
+}
+
+a.profile {
+  color: #000;
+  text-decoration: underline;
+}
+a.profile:hover {
+  color: tomato;
+  text-decoration: underline;
+}
+.footer-container {
+  /* padding: 7px; */
+  width: 97%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  align-items: center;
+  justify-content: space-evenly;
+  display: flex;
+}

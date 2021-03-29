@@ -9,6 +9,8 @@ import Registration from "./component/Registration";
 import Verification from "./component/Verification";
 import StartEnd from "./component/StartEnd";
 
+import Footer from "./component/Footer/Footer";
+
 import "./App.css";
 
 export default class App extends Component {
@@ -27,6 +29,7 @@ export default class App extends Component {
             <Route exact path="*" component={NotFound} />
           </Switch>
         </Router>
+        <Footer />
       </div>
     );
   }

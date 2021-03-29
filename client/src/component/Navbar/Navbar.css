@@ -39,7 +39,7 @@ nav .navbar-links a {
 }
 nav .navbar-links a:hover {
   cursor: pointer;
-  /* color: black; */
+  color: black;
 }
 nav .burger-menu {
   font-size: 24px;

@@ -52,9 +52,14 @@ contract Election {
         candidateCount += 1;
     }
 
-    function getCandidateNumber() public view returns (uint256) {
+    function getTotalCandidate() public view returns (uint256) {
         // Returns total number of candidates
         return candidateCount;
+    }
+
+    function getTotalVoter() public view returns (uint256) {
+        // Returns total number of voters
+        return voterCount;
     }
 
     struct Voter {
@@ -64,20 +69,22 @@ contract Election {
         string phone;
         bool isVerified;
         bool hasVoted;
+        bool isRegistered;
     }
 
     address[] public voters; // Array of address to store address of voters
     mapping(address => Voter) public voterDetails;
 
     // Request to be added as voter
-    function requestVoter(string memory _name, string memory _phone) public {
+    function registerAsVoter(string memory _name, string memory _phone) public {
         Voter memory newVoter =
             Voter({
                 voterAddress: msg.sender,
                 name: _name,
                 phone: _phone,
                 hasVoted: false,
-                isVerified: false
+                isVerified: false,
+                isRegistered: true
             });
         voterDetails[msg.sender] = newVoter;
         voters.push(msg.sender);

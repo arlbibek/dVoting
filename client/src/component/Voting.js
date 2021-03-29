@@ -46,14 +46,17 @@ export default class Voting extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, ElectionInstance: instance, account: accounts[0] });
+      this.setState({
+        web3: web3,
+        ElectionInstance: instance,
+        account: accounts[0],
+      });
 
       // Get total number of candidates
       const candidateCount = await this.state.ElectionInstance.methods
-        .getCandidateNumber()
+        .getTotalCandidate()
         .call();
       this.setState({ candidateCount: candidateCount });
-
       // Get start and end values
       const start = await this.state.ElectionInstance.methods.getStart().call();
       this.setState({ isElStarted: start });
@@ -71,9 +74,7 @@ export default class Voting extends Component {
           slogan: candidate.slogan,
         });
       }
-
       this.setState({ candidates: this.state.candidates });
-      console.log(this.state.candidates);
 
       // Admin account and verification
       const admin = await this.state.ElectionInstance.methods.getAdmin().call();
@@ -88,6 +89,44 @@ export default class Voting extends Component {
       console.error(error);
     }
   };
+
+  renderCandidates = (candidate) => {
+    const castVote = async (id) => {
+      await this.state.ElectionInstance.methods
+        .vote(id)
+        .send({ from: this.state.account, gas: 1000000 });
+      window.location.reload();
+    };
+    const confirmVote = (id, header) => {
+      var r = window.confirm(
+        "Vote for " + header + " with Id " + id + ".\nAre you sure?"
+      );
+      if (r === true) {
+        castVote(id);
+      }
+    };
+    return (
+      <div className="container-item">
+        <div className="candidate-info">
+          <h2>
+            {candidate.header} <small>#{candidate.id}</small>
+          </h2>
+          {/* <p className="contact">{candidate.contact}</p> */}
+          <p className="slogan">{candidate.slogan}</p>
+          {/* <p className="discription">{candidate.discription}</p> */}
+        </div>
+        <div className="vote-btn-container">
+          <button
+            onClick={() => confirmVote(candidate.id, candidate.header)}
+            className="vote-bth"
+          >
+            Vote
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   render() {
     if (!this.state.web3) {
       return (
@@ -106,7 +145,7 @@ export default class Voting extends Component {
             <>
               <div className="container-item info">
                 <center>
-                  <h3>The election has never been initialize.</h3>
+                  <h3>The election has not been initialize.</h3>
                   <p>Please Wait..</p>
                 </center>
               </div>
@@ -116,7 +155,26 @@ export default class Voting extends Component {
               <div className="container-item info">
                 <center>Go ahead and cast your vote.</center>
               </div>
-              {voteCandidates(this.state.candidates)}
+              {/* {voteCandidates(this.state.candidates)} */}
+              <div className="container-main">
+                <h2>Candidates</h2>
+                <small>Total candidates: {this.state.candidates.length}</small>
+                {this.state.candidates.length < 1 ? (
+                  <div className="container-item attention">
+                    <center>Not one to vote for.</center>
+                  </div>
+                ) : (
+                  <>
+                    {this.state.candidates.map(this.renderCandidates)}
+                    <div
+                      className="container-item"
+                      style={{ border: "1px solid black" }}
+                    >
+                      <center>That is all.</center>
+                    </div>
+                  </>
+                )}
+              </div>
             </>
           ) : !this.state.isElStarted && this.state.isElEnded ? (
             <>
@@ -139,6 +197,7 @@ export default class Voting extends Component {
     );
   }
 }
+
 export function voteCandidates(candidates) {
   const confirmVote = (id, header) => {
     var r = window.confirm(
@@ -148,7 +207,6 @@ export function voteCandidates(candidates) {
       alert("You've Voted for " + header + " #" + id);
     }
   };
-
   const renderCandidates = (candidate) => {
     return (
       <div className="container-item">

@@ -54,7 +54,7 @@ export default class AddCandidate extends Component {
 
       // Total number of candidates
       const candidateCount = await this.state.ElectionInstance.methods
-        .getCandidateNumber()
+        .getTotalCandidate()
         .call();
       this.setState({ candidateCount: candidateCount });
 
@@ -63,10 +63,10 @@ export default class AddCandidate extends Component {
         this.setState({ isAdmin: true });
       }
 
-      // Loadin Candidates detials
-      for (let i = 1; i <= this.state.candidateCount; i++) {
+      // Loading Candidates detials
+      for (let i = 0; i < this.state.candidateCount; i++) {
         const candidate = await this.state.ElectionInstance.methods
-          .candidateDetails(i - 1)
+          .candidateDetails(i)
           .call();
         this.state.candidates.push({
           id: candidate.candidateId,
@@ -77,10 +77,10 @@ export default class AddCandidate extends Component {
       this.setState({ candidates: this.state.candidates });
     } catch (error) {
       // Catch any errors for any of the above operations.
+      console.error(error);
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`
       );
-      console.error(error);
     }
   };
   updateHeader = (event) => {
@@ -94,7 +94,7 @@ export default class AddCandidate extends Component {
     await this.state.ElectionInstance.methods
       .addCandidate(this.state.header, this.state.slogan)
       .send({ from: this.state.account, gas: 1000000 });
-    window.location.reload(false);
+    window.location.reload();
   };
 
   render() {
@@ -140,16 +140,17 @@ export default class AddCandidate extends Component {
               />
               <button
                 className="btn-add"
-                disabled={this.state.header.length < 3}
-                disabled={this.state.header.length > 21}
+                disabled={
+                  this.state.header.length < 3 || this.state.header.length > 21
+                }
                 onClick={this.addCandidate}
               >
                 Add
               </button>
             </form>
           </div>
-          {loadAdded(this.state.candidates)}
         </div>
+        {loadAdded(this.state.candidates)}
       </>
     );
   }
@@ -165,10 +166,12 @@ export function loadAdded(candidates) {
     );
   };
   return (
-    <div className="container-main">
-      <h2>Candidates List</h2>
+    <div className="container-main" style={{ borderTop: "1px solid" }}>
+      <div className="container-item info">
+        <center>Candidates List</center>
+      </div>
       {candidates.length < 1 ? (
-        <div className="container-item">
+        <div className="container-item alert">
           <center>No candidates added.</center>
         </div>
       ) : (

@@ -11,14 +11,25 @@ export default class Registration extends Component {
     super(props);
     this.state = {
       ElectionInstance: undefined,
-      account: null,
       web3: null,
+      account: null,
       isAdmin: false,
-      candidateCount: undefined,
+      voterCount: undefined,
+      voterName: "",
+      voterPhone: "",
+      voters: [],
+      currentVoter: {
+        address: undefined,
+        name: null,
+        phone: null,
+        hasVoted: false,
+        isVerified: false,
+        isRegistered: false,
+      },
     };
   }
-  // refreshing once
 
+  // refreshing once
   componentDidMount = async () => {
     if (!window.location.hash) {
       window.location = window.location + "#loaded";
@@ -41,26 +52,77 @@ export default class Registration extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, ElectionInstance: instance, account: accounts[0] });
-
-      // Total number of candidates
-      const candidateCount = await this.state.ElectionInstance.methods
-        .getCandidateNumber()
-        .call();
-      this.setState({ candidateCount: candidateCount });
+      this.setState({
+        web3: web3,
+        ElectionInstance: instance,
+        account: accounts[0],
+      });
 
       // Admin account and verification
       const admin = await this.state.ElectionInstance.methods.getAdmin().call();
       if (this.state.account === admin) {
         this.setState({ isAdmin: true });
       }
+
+      // Total number of voters
+      const voterCount = await this.state.ElectionInstance.methods
+        .getTotalVoter()
+        .call();
+      this.setState({ voterCount: voterCount });
+
+      // Loading all the voters
+      for (let i = 0; i < this.state.voterCount; i++) {
+        const voterAddress = await this.state.ElectionInstance.methods
+          .voters(i)
+          .call();
+        const voter = await this.state.ElectionInstance.methods
+          .voterDetails(voterAddress)
+          .call();
+        console.log(voter);
+        this.state.voters.push({
+          address: voter.voterAddress,
+          name: voter.name,
+          phone: voter.phone,
+          hasVoted: voter.hasVoted,
+          isVerified: voter.isVerified,
+          isRegistered: voter.isRegistered,
+        });
+      }
+      this.setState({ voters: this.state.voters });
+
+      // Loading current voters
+      const voter = await this.state.ElectionInstance.methods
+        .voterDetails(this.state.account)
+        .call();
+      this.setState({
+        currentVoter: {
+          address: voter.voterAddress,
+          name: voter.name,
+          phone: voter.phone,
+          hasVoted: voter.hasVoted,
+          isVerified: voter.isVerified,
+          isRegistered: voter.isRegistered,
+        },
+      });
     } catch (error) {
       // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
-      );
       console.error(error);
+      alert(
+        `Failed to load web3, accounts, or contract. Check console for details (f12).`
+      );
     }
+  };
+  updateVoterName = (event) => {
+    this.setState({ voterName: event.target.value });
+  };
+  updateVoterPhone = (event) => {
+    this.setState({ voterPhone: event.target.value });
+  };
+  registerAsVoter = async () => {
+    await this.state.ElectionInstance.methods
+      .registerAsVoter(this.state.voterName, this.state.voterPhone)
+      .send({ from: this.state.account, gas: 1000000 });
+    window.location.reload();
   };
   render() {
     if (!this.state.web3) {
@@ -71,13 +133,154 @@ export default class Registration extends Component {
         </>
       );
     }
-
     return (
       <>
         {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-        <h1>Registration page</h1>
-        <center>This is where register to vote.</center>
+        <div className="container-item info">
+          <p>Total registred voters: {this.state.voters.length}</p>
+        </div>
+        {!this.state.currentVoter.isRegistered ? (
+          <div className="container-main">
+            <h3>Register</h3>
+            <div className="container-item">
+              <form>
+                <label>First Name</label>
+                <input
+                  type="text"
+                  placeholder="eg. Thanos"
+                  value={this.state.voterName}
+                  onChange={this.updateVoterName}
+                  style={{ width: "157px" }}
+                />{" "}
+                <label>
+                  Phone <span style={{ color: "tomato" }}>*</span>
+                </label>
+                <input
+                  type="number"
+                  placeholder="eg. 9841234567"
+                  value={this.state.voterPhone}
+                  onChange={this.updateVoterPhone}
+                  style={{ width: "157px" }}
+                />
+                <button
+                  className="btn-add"
+                  disabled={
+                    this.state.voterPhone.length !== 10 ||
+                    this.state.currentVoter.isRegistered
+                  }
+                  onClick={this.registerAsVoter}
+                >
+                  {this.state.currentVoter.isRegistered ? "Update" : "Register"}
+                </button>
+              </form>
+            </div>
+          </div>
+        ) : null}
+        <div
+          className="container-main"
+          style={{
+            borderTop: this.state.currentVoter.isRegistered
+              ? null
+              : "1px solid",
+          }}
+        >
+          {loadCurrentVoter(
+            this.state.currentVoter,
+            this.state.currentVoter.isRegistered
+          )}
+        </div>
+        {this.state.isAdmin ? (
+          <div className="container-main" style={{ borderTop: "1px solid" }}>
+            <small>TotalVoters: {this.state.voters.length}</small>
+            {loadAllVoters(this.state.voters)}
+          </div>
+        ) : null}
       </>
     );
   }
+}
+export function loadCurrentVoter(voter, isRegistered) {
+  return (
+    <>
+      <div
+        className={"container-item " + (isRegistered ? "success" : "attention")}
+      >
+        <center>Your Info</center>
+      </div>
+      <div
+        className={"container-list " + (isRegistered ? "success" : "attention")}
+      >
+        <table>
+          <tr>
+            <th>Account Address</th>
+            <td>{voter.address}</td>
+          </tr>
+          <tr>
+            <th>Name</th>
+            <td>{voter.name}</td>
+          </tr>
+          <tr>
+            <th>Phone</th>
+            <td>{voter.phone}</td>
+          </tr>
+          <tr>
+            <th>Voted</th>
+            <td>{voter.hasVoted ? "True" : "False"}</td>
+          </tr>
+          <tr>
+            <th>Verification</th>
+            <td>{voter.isVerified ? "True" : "False"}</td>
+          </tr>
+          <tr>
+            <th>Registred</th>
+            <td>{voter.isRegistered ? "True" : "False"}</td>
+          </tr>
+        </table>
+      </div>
+    </>
+  );
+}
+export function loadAllVoters(voters) {
+  const renderAllVoters = (voter) => {
+    return (
+      <>
+        <div className="container-list success">
+          <table>
+            <tr>
+              <th>Account address</th>
+              <td>{voter.address}</td>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <td>{voter.name}</td>
+            </tr>
+            <tr>
+              <th>Phone</th>
+              <td>{voter.phone}</td>
+            </tr>
+            <tr>
+              <th>Voted</th>
+              <td>{voter.hasVoted ? "True" : "False"}</td>
+            </tr>
+            <tr>
+              <th>Verified</th>
+              <td>{voter.isVerified ? "True" : "False"}</td>
+            </tr>
+            <tr>
+              <th>Registred</th>
+              <td>{voter.isRegistered ? "True" : "False"}</td>
+            </tr>
+          </table>
+        </div>
+      </>
+    );
+  };
+  return (
+    <>
+      <div className="container-item success">
+        <center>List of voters</center>
+      </div>
+      {voters.map(renderAllVoters)}
+    </>
+  );
 }

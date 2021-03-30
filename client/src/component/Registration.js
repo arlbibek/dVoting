@@ -78,7 +78,6 @@ export default class Registration extends Component {
         const voter = await this.state.ElectionInstance.methods
           .voterDetails(voterAddress)
           .call();
-        console.log(voter);
         this.state.voters.push({
           address: voter.voterAddress,
           name: voter.name,

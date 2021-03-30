@@ -91,6 +91,17 @@ contract Election {
         voterCount += 1;
     }
 
+    // Verify voter
+    function verifyVoter(bool _verifedStatus, address voterAddress)
+        public
+        // Only admin can verify
+        onlyAdmin
+    {
+        voterDetails[voterAddress].isVerified = _verifedStatus;
+        // Voter storage voter = Voters[voterAddress];
+        // voter.isVerified: _verifedStatus;
+    }
+
     function vote(uint256 candidateId) public {
         require(voterDetails[msg.sender].hasVoted == false);
         require(voterDetails[msg.sender].isVerified == true);

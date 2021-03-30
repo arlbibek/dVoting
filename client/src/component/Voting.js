@@ -21,6 +21,14 @@ export default class Voting extends Component {
       candidates: [],
       isElStarted: false,
       isElEnded: false,
+      currentVoter: {
+        address: undefined,
+        name: null,
+        phone: null,
+        hasVoted: false,
+        isVerified: false,
+        isRegistered: false,
+      },
     };
   }
   componentDidMount = async () => {
@@ -76,6 +84,21 @@ export default class Voting extends Component {
       }
       this.setState({ candidates: this.state.candidates });
 
+      // Loading current voters
+      const voter = await this.state.ElectionInstance.methods
+        .voterDetails(this.state.account)
+        .call();
+      this.setState({
+        currentVoter: {
+          address: voter.voterAddress,
+          name: voter.name,
+          phone: voter.phone,
+          hasVoted: voter.hasVoted,
+          isVerified: voter.isVerified,
+          isRegistered: voter.isRegistered,
+        },
+      });
+
       // Admin account and verification
       const admin = await this.state.ElectionInstance.methods.getAdmin().call();
       if (this.state.account === admin) {
@@ -119,6 +142,7 @@ export default class Voting extends Component {
           <button
             onClick={() => confirmVote(candidate.id, candidate.header)}
             className="vote-bth"
+            disabled={!this.state.currentVoter.isRegistered}
           >
             Vote
           </button>
@@ -152,10 +176,26 @@ export default class Voting extends Component {
             </>
           ) : this.state.isElStarted && !this.state.isElEnded ? (
             <>
-              <div className="container-item info">
-                <center>Go ahead and cast your vote.</center>
-              </div>
-              {/* {voteCandidates(this.state.candidates)} */}
+              {this.state.currentVoter.isRegistered ? (
+                <div className="container-item info">
+                  <center>Go ahead and cast your vote.</center>
+                </div>
+              ) : (
+                <>
+                  <div className="container-item attention">
+                    <center>
+                      <p>You're not registred. Please register first.</p>
+                      <br />
+                      <Link
+                        to="/Registration"
+                        style={{ color: "black", textDecoration: "underline" }}
+                      >
+                        Registration Page
+                      </Link>
+                    </center>
+                  </div>
+                </>
+              )}
               <div className="container-main">
                 <h2>Candidates</h2>
                 <small>Total candidates: {this.state.candidates.length}</small>
@@ -198,53 +238,55 @@ export default class Voting extends Component {
   }
 }
 
-export function voteCandidates(candidates) {
-  const confirmVote = (id, header) => {
-    var r = window.confirm(
-      "Vote for " + header + " with Id " + id + ".\nAre you sure?"
-    );
-    if (r === true) {
-      alert("You've Voted for " + header + " #" + id);
-    }
-  };
-  const renderCandidates = (candidate) => {
-    return (
-      <div className="container-item">
-        <div className="candidate-info">
-          <h2>
-            {candidate.header} <small>#{candidate.id}</small>
-          </h2>
-          {/* <p className="contact">{candidate.contact}</p> */}
-          <p className="slogan">{candidate.slogan}</p>
-          {/* <p className="discription">{candidate.discription}</p> */}
-        </div>
-        <div className="vote-btn-container">
-          <button
-            onClick={() => confirmVote(candidate.id, candidate.header)}
-            className="vote-bth"
-          >
-            Vote
-          </button>
-        </div>
-      </div>
-    );
-  };
-  return (
-    <div className="container-main">
-      <h2>Candidates</h2>
-      <small>Total candidates: {candidates.length}</small>
-      {candidates.length < 1 ? (
-        <div className="container-item attention">
-          <center>Not one to vote for.</center>
-        </div>
-      ) : (
-        <>
-          {candidates.map(renderCandidates)}
-          <div className="container-item" style={{ border: "1px solid black" }}>
-            <center>That is all.</center>
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
+// export function voteCandidates(candidates) {
+//   const confirmVote = (id, header) => {
+//     var r = window.confirm(
+//       "Vote for " + header + " with Id " + id + ".\nAre you sure?"
+//     );
+//     if (r === true) {
+//       alert("You've Voted for " + header + " #" + id);
+//     }
+//   };
+//   const renderCandidates = (candidate) => {
+//     return (
+//       <div className="container-item">
+//         <div className="candidate-info">
+//           <h2>
+//             {candidate.header} <small>#{candidate.id}</small>
+//           </h2>
+//           {/* <p className="contact">{candidate.contact}</p> */}
+//           <p className="slogan">{candidate.slogan}</p>
+//           {/* <p className="discription">{candidate.discription}</p> */}
+//         </div>
+//         <div className="vote-btn-container">
+//           <button
+//             className="vote-bth"
+//             onClick={() => confirmVote(candidate.id, candidate.header)}
+//             disabled={true}
+//           >
+//             Vote
+//           </button>
+//           <button disabled={true}>Boo</button>
+//         </div>
+//       </div>
+//     );
+//   };
+//   return (
+//     <div className="container-main">
+//       <h2>Candidates</h2>
+//       <small>Total candidates: {candidates.length}</small>
+//       {candidates.length < 1 ? (
+//         <div className="container-item attention">
+//           <center>Not one to vote for.</center>
+//         </div>
+//       ) : (
+//         <>
+//           {candidates.map(renderCandidates)}
+//           <div className="container-item" style={{ border: "1px solid black" }}>
+//             <center>That is all.</center>
+//           </div>
+//         </>
+//       )}
+//     </div>
+//   );
+// }

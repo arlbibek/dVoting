@@ -84,7 +84,7 @@ export default class Voting extends Component {
       }
       this.setState({ candidates: this.state.candidates });
 
-      // Loading current voters
+      // Loading current voter
       const voter = await this.state.ElectionInstance.methods
         .voterDetails(this.state.account)
         .call();
@@ -142,7 +142,10 @@ export default class Voting extends Component {
           <button
             onClick={() => confirmVote(candidate.id, candidate.header)}
             className="vote-bth"
-            disabled={!this.state.currentVoter.isRegistered}
+            disabled={
+              !this.state.currentVoter.isRegistered ||
+              this.state.currentVoter.hasVoted
+            }
           >
             Vote
           </button>
@@ -177,9 +180,35 @@ export default class Voting extends Component {
           ) : this.state.isElStarted && !this.state.isElEnded ? (
             <>
               {this.state.currentVoter.isRegistered ? (
-                <div className="container-item info">
-                  <center>Go ahead and cast your vote.</center>
-                </div>
+                this.state.currentVoter.isVerified ? (
+                  this.state.currentVoter.hasVoted ? (
+                    <div className="container-item success">
+                      <div>
+                        <strong>You've casted your vote.</strong>
+                        <p />
+                        <center>
+                          <Link
+                            to="/Results"
+                            style={{
+                              color: "black",
+                              textDecoration: "underline",
+                            }}
+                          >
+                            See Results
+                          </Link>
+                        </center>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="container-item info">
+                      <center>Go ahead and cast your vote.</center>
+                    </div>
+                  )
+                ) : (
+                  <div className="container-item attention">
+                    <center>Please wait for admin to verify.</center>
+                  </div>
+                )
               ) : (
                 <>
                   <div className="container-item attention">

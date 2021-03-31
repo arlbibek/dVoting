@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import Navbar from "../../Navbar/Navigation";
 import NavbarAdmin from "../../Navbar/NavigationAdmin";
 
+import AdminOnly from "../../AdminOnly";
+
 import getWeb3 from "../../../getWeb3";
 import Election from "../../../contracts/Election.json";
 
@@ -96,9 +98,7 @@ export default class StartEnd extends Component {
       return (
         <>
           <Navbar />
-          <div className="container-item attention">
-            <p>Admin Access Only!</p>
-          </div>
+          <AdminOnly page="Start and end election page." />
         </>
       );
     }

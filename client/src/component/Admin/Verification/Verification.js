@@ -3,8 +3,12 @@ import React, { Component } from "react";
 import Navbar from "../../Navbar/Navigation";
 import NavbarAdmin from "../../Navbar/NavigationAdmin";
 
+import AdminOnly from "../../AdminOnly";
+
 import getWeb3 from "../../../getWeb3";
 import Election from "../../../contracts/Election.json";
+
+import "./Verification.css";
 
 export default class Registration extends Component {
   constructor(props) {
@@ -78,7 +82,6 @@ export default class Registration extends Component {
         });
       }
       this.setState({ voters: this.state.voters });
-      console.log(this.state.voters);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -87,43 +90,13 @@ export default class Registration extends Component {
       console.error(error);
     }
   };
-  render() {
-    if (!this.state.web3) {
-      return (
-        <>
-          {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-          <center>Loading Web3, accounts, and contract...</center>
-        </>
-      );
-    }
-    if (!this.state.isAdmin) {
-      return (
-        <>
-          <Navbar />
-          <h1>Verification page</h1>
-          <center>Admin Access Only!</center>
-        </>
-      );
-    }
-    return (
-      <>
-        <NavbarAdmin />
-        <div className="container-main">
-          {this.state.isAdmin ? (
-            <>
-              <h3>Verification</h3>
-              <small>TotalVoters: {this.state.voters.length}</small>
-              {loadAllVoters(this.state.voters)}
-            </>
-          ) : null}
-        </div>
-      </>
-    );
-  }
-}
-
-export function loadAllVoters(voters) {
-  const renderAllVoters = (voter) => {
+  renderAllVoters = (voter) => {
+    const verifyVoter = async (verifiedStatus, address) => {
+      await this.state.ElectionInstance.methods
+        .verifyVoter(verifiedStatus, address)
+        .send({ from: this.state.account, gas: 1000000 });
+      window.location.reload();
+    };
     return (
       <>
         <div className="container-list success">
@@ -153,17 +126,107 @@ export function loadAllVoters(voters) {
               <td>{voter.isRegistered ? "True" : "False"}</td>
             </tr>
           </table>
-          <button>Verify</button>
+          <div style={{}}>
+            <button
+              className="btn-verification approve"
+              disabled={voter.isVerified}
+              onClick={() => verifyVoter(true, voter.address)}
+            >
+              Approve
+            </button>
+            {/* <button
+              className="btn-verification reject"
+              onClick={() => verifyVoter(false, this.state.account)}
+            >
+              Reject
+            </button> */}
+          </div>
         </div>
       </>
     );
   };
-  return (
-    <>
-      <div className="container-item success">
-        <center>List of voters</center>
-      </div>
-      {voters.map(renderAllVoters)}
-    </>
-  );
+  render() {
+    if (!this.state.web3) {
+      return (
+        <>
+          {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
+          <center>Loading Web3, accounts, and contract...</center>
+        </>
+      );
+    }
+    if (!this.state.isAdmin) {
+      return (
+        <>
+          <Navbar />
+          <AdminOnly page="Verification page" />
+        </>
+      );
+    }
+    return (
+      <>
+        <NavbarAdmin />
+        <div className="container-main">
+          <h3>Verification</h3>
+          <small>Total Voters: {this.state.voters.length}</small>
+          {this.state.voters.length < 1 ? (
+            <div className="container-item info">None has registred yet.</div>
+          ) : (
+            <>
+              <div className="container-item success">
+                <center>List of voters</center>
+              </div>
+              {this.state.voters.map(this.renderAllVoters)}
+            </>
+          )}
+        </div>
+      </>
+    );
+  }
 }
+
+// export function loadAllVoters(voters) {
+//   const renderAllVoters = (voter) => {
+//     return (
+//       <>
+//         <div className="container-list success">
+//           <table>
+//             <tr>
+//               <th>Account address</th>
+//               <td>{voter.address}</td>
+//             </tr>
+//             <tr>
+//               <th>Name</th>
+//               <td>{voter.name}</td>
+//             </tr>
+//             <tr>
+//               <th>Phone</th>
+//               <td>{voter.phone}</td>
+//             </tr>
+//             <tr>
+//               <th>Voted</th>
+//               <td>{voter.hasVoted ? "True" : "False"}</td>
+//             </tr>
+//             <tr>
+//               <th>Verified</th>
+//               <td>{voter.isVerified ? "True" : "False"}</td>
+//             </tr>
+//             <tr>
+//               <th>Registred</th>
+//               <td>{voter.isRegistered ? "True" : "False"}</td>
+//             </tr>
+//           </table>
+//           <button className="btn-verification approve">Approve</button>
+//           <button className="btn-verification reject">Reject</button>
+//         </div>
+//       </>
+//     );
+//   };
+//   return (
+//     <>
+//       <div className="container-item success">
+//         <center>List of voters</center>
+//       </div>
+//       {voters.map(renderAllVoters)}
+//     </>
+//   );
+// }

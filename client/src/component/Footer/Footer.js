@@ -13,7 +13,7 @@ const Footer = () => (
             className="profile"
             href="https://github.com/arlbibek/dVoting"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             GitHub
           </a>
@@ -25,7 +25,7 @@ const Footer = () => (
             className="profile"
             href="https://arlbibek.github.io"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             Bibek Aryal
           </a>

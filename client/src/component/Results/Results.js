@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-
-import Navbar from "./Navbar/Navigation";
-import NavbarAdmin from "./Navbar/NavigationAdmin";
-
-import getWeb3 from "../getWeb3";
-import Election from "../contracts/Election.json";
 import { Link } from "react-router-dom";
+
+import Navbar from "../Navbar/Navigation";
+import NavbarAdmin from "../Navbar/NavigationAdmin";
+
+import getWeb3 from "../../getWeb3";
+import Election from "../../contracts/Election.json";
 
 import "./Results.css";
 

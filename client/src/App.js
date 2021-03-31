@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import AddCandidate from "./component/AddCandidate";
 import Home from "./component/Home";
-import Voting from "./component/Voting";
-import Results from "./component/Results";
-import Registration from "./component/Registration";
-import Verification from "./component/Verification";
-import StartEnd from "./component/StartEnd";
+
+import Voting from "./component/Voting/Voting";
+import Results from "./component/Results/Results";
+import Registration from "./component/Registration/Registration";
+
+import AddCandidate from "./component/Admin/AddCandidate/AddCandidate";
+import Verification from "./component/Admin/Verification/Verification";
+import StartEnd from "./component/Admin/StartEnd/StartEnd";
 
 import Footer from "./component/Footer/Footer";
 

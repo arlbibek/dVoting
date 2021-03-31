@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
-import Navbar from "./Navbar/Navigation";
-import NavbarAdmin from "./Navbar/NavigationAdmin";
+import Navbar from "../Navbar/Navigation";
+import NavbarAdmin from "../Navbar/NavigationAdmin";
 
-import getWeb3 from "../getWeb3";
-import Election from "../contracts/Election.json";
+import getWeb3 from "../../getWeb3";
+import Election from "../../contracts/Election.json";
 
 export default class Registration extends Component {
   constructor(props) {

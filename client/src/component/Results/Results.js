@@ -138,12 +138,12 @@ export default class Result extends Component {
 }
 
 export function displayResults(candidates) {
-  const renderResults = (candidates) => {
+  const renderResults = (candidate) => {
     return (
       <tr>
-        <td>{candidates.id}</td>
-        <td>{candidates.header}</td>
-        <td>{candidates.voteCount}</td>
+        <td>{candidate.id}</td>
+        <td>{candidate.header}</td>
+        <td>{candidate.voteCount}</td>
       </tr>
     );
   };

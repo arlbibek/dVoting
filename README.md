@@ -2,7 +2,7 @@
 
 # Decentralized Voting (dVoting)
 
-A decentralized voting system based on Ethereum blockchain technology for corporate use.
+A decentralized voting system based on Ethereum blockchain technology (designed for corporate use).
 
 ## Requirements
 

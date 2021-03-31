@@ -23,7 +23,7 @@ A decentralized voting system based on Ethereum blockchain technology (designed 
 
 1. Install truffle and ganache-cli
 
-   > truffle `v5.2.4`
+   > truffle `v5.2.4`  
    > ganache-cli `v6.12.2`
 
    ```shell
@@ -54,7 +54,7 @@ A decentralized voting system based on Ethereum blockchain technology (designed 
 
 1. Configure metamask on the browser with following details
 
-   New RPC URL: `http://localhost:8545`
+   New RPC URL: `http://localhost:8545`  
    Chain ID: `1337`
 
 1. Import accounts using private keys from ganache-cli to the metamask extension on the browser

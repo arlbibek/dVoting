@@ -6,6 +6,8 @@ import NavbarAdmin from "../../Navbar/NavigationAdmin";
 import getWeb3 from "../../../getWeb3";
 import Election from "../../../contracts/Election.json";
 
+import AdminOnly from "../../AdminOnly";
+
 import "./AddCandidate.css";
 
 export default class AddCandidate extends Component {
@@ -110,8 +112,7 @@ export default class AddCandidate extends Component {
       return (
         <>
           <Navbar />
-          <h1>Add Candidate Page</h1>
-          <center>Admin Access Only!</center>
+          <AdminOnly page="Add Candidate Page." />
         </>
       );
     }
@@ -122,7 +123,7 @@ export default class AddCandidate extends Component {
           <h2>Add a new candidate</h2>
           <small>Total candidates: {this.state.candidateCount}</small>
           <div className="container-item">
-            <form>
+            <form className="form">
               <label>Header</label>
               <input
                 type="text"

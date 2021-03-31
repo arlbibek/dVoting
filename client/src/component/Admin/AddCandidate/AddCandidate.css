@@ -1,10 +1,10 @@
-form {
+.form {
   width: fit-content;
+  margin: 5px;
+  padding: 7px;
   margin-right: auto;
   margin-left: auto;
   overflow: auto;
-  margin: 5px;
-  padding: 7px;
 }
 input,
 label,
@@ -26,21 +26,14 @@ input,
   width: 25%;
   float: inline-end;
 }
-.container-list {
-  width: 100%;
-  padding: 11px;
-  margin: 3px auto;
-  align-items: center;
-  justify-content: center;
-  display: block;
-  overflow: auto;
-}
 
-@media all and (max-width: 650px) {
+@media all and (max-width: 400px) {
   input,
   label,
-  button {
+  .btn-add {
     width: 100%;
+  }
+  .btn-add {
     float: inline-start;
   }
 }

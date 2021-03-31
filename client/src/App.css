@@ -31,6 +31,16 @@ h1 {
   overflow: auto;
 }
 
+.container-list {
+  width: 100%;
+  padding: 11px;
+  margin: 3px auto;
+  align-items: center;
+  justify-content: center;
+  display: block;
+  overflow: auto;
+}
+
 @media all and (max-width: 1020px) {
   .container-item {
     width: 777px;
@@ -65,6 +75,7 @@ h1 {
 
 .info,
 .attention,
+.alert,
 .success {
   border: 1px solid black;
   margin-top: 11px;

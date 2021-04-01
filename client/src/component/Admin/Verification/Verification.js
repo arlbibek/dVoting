@@ -90,7 +90,7 @@ export default class Registration extends Component {
       console.error(error);
     }
   };
-  renderAllVoters = (voter) => {
+  renderUnverifiedVoters = (voter) => {
     const verifyVoter = async (verifiedStatus, address) => {
       await this.state.ElectionInstance.methods
         .verifyVoter(verifiedStatus, address)
@@ -99,7 +99,27 @@ export default class Registration extends Component {
     };
     return (
       <>
-        <div className="container-list success">
+        {voter.isVerified ? (
+          <div className="container-list success">
+            <p style={{ margin: "7px 0px" }}>AC: {voter.address}</p>
+            <table>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Voted</th>
+              </tr>
+              <tr>
+                <td>{voter.name}</td>
+                <td>{voter.phone}</td>
+                <td>{voter.hasVoted ? "True" : "False"}</td>
+              </tr>
+            </table>
+          </div>
+        ) : null}
+        <div
+          className="container-list attention"
+          style={{ display: voter.isVerified ? "none" : null }}
+        >
           <table>
             <tr>
               <th>Account address</th>
@@ -134,12 +154,6 @@ export default class Registration extends Component {
             >
               Approve
             </button>
-            {/* <button
-              className="btn-verification reject"
-              onClick={() => verifyVoter(false, this.state.account)}
-            >
-              Reject
-            </button> */}
           </div>
         </div>
       </>
@@ -172,10 +186,10 @@ export default class Registration extends Component {
             <div className="container-item info">None has registred yet.</div>
           ) : (
             <>
-              <div className="container-item success">
+              <div className="container-item info">
                 <center>List of voters</center>
               </div>
-              {this.state.voters.map(this.renderAllVoters)}
+              {this.state.voters.map(this.renderUnverifiedVoters)}
             </>
           )}
         </div>
@@ -183,50 +197,3 @@ export default class Registration extends Component {
     );
   }
 }
-
-// export function loadAllVoters(voters) {
-//   const renderAllVoters = (voter) => {
-//     return (
-//       <>
-//         <div className="container-list success">
-//           <table>
-//             <tr>
-//               <th>Account address</th>
-//               <td>{voter.address}</td>
-//             </tr>
-//             <tr>
-//               <th>Name</th>
-//               <td>{voter.name}</td>
-//             </tr>
-//             <tr>
-//               <th>Phone</th>
-//               <td>{voter.phone}</td>
-//             </tr>
-//             <tr>
-//               <th>Voted</th>
-//               <td>{voter.hasVoted ? "True" : "False"}</td>
-//             </tr>
-//             <tr>
-//               <th>Verified</th>
-//               <td>{voter.isVerified ? "True" : "False"}</td>
-//             </tr>
-//             <tr>
-//               <th>Registred</th>
-//               <td>{voter.isRegistered ? "True" : "False"}</td>
-//             </tr>
-//           </table>
-//           <button className="btn-verification approve">Approve</button>
-//           <button className="btn-verification reject">Reject</button>
-//         </div>
-//       </>
-//     );
-//   };
-//   return (
-//     <>
-//       <div className="container-item success">
-//         <center>List of voters</center>
-//       </div>
-//       {voters.map(renderAllVoters)}
-//     </>
-//   );
-// }

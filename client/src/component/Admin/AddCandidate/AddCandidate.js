@@ -73,6 +73,7 @@ export default class AddCandidate extends Component {
         this.state.candidates.push({
           id: candidate.candidateId,
           header: candidate.header,
+          slogan: candidate.slogan,
         });
       }
 
@@ -161,7 +162,15 @@ export function loadAdded(candidates) {
     return (
       <>
         <div className="container-list success">
-          {candidate.id}. {candidate.header}
+          <div
+            style={{
+              maxHeight: "21px",
+              overflow: "auto",
+            }}
+          >
+            {candidate.id}. <strong>{candidate.header}</strong>:{" "}
+            {candidate.slogan}
+          </div>
         </div>
       </>
     );
@@ -176,7 +185,15 @@ export function loadAdded(candidates) {
           <center>No candidates added.</center>
         </div>
       ) : (
-        candidates.map(renderAdded)
+        <div
+          className="container-item"
+          style={{
+            display: "block",
+            backgroundColor: "#DDFFFF",
+          }}
+        >
+          {candidates.map(renderAdded)}
+        </div>
       )}
     </div>
   );

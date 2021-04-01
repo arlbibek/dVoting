@@ -68,6 +68,7 @@ export default class Result extends Component {
         this.state.candidates.push({
           id: candidate.candidateId,
           header: candidate.header,
+          slogan: candidate.slogan,
           voteCount: candidate.voteCount,
         });
       }
@@ -87,6 +88,7 @@ export default class Result extends Component {
       console.error(error);
     }
   };
+
   render() {
     if (!this.state.web3) {
       return (
@@ -117,7 +119,7 @@ export default class Result extends Component {
                 <center>
                   <h3>The election is being conducted at the movement.</h3>
                   <p>Result will be displayed once the election has ended.</p>
-                  <p>Go ahead and cast your vote.</p>
+                  <p>Go ahead and cast your vote {"(if not already)"}.</p>
                   <br />
                   <Link
                     to="/Voting"
@@ -137,6 +139,33 @@ export default class Result extends Component {
   }
 }
 
+    let maxVoteRecived = 0;
+    for (let i = 0; i < candidates.length; i++) {
+      if (candidates[i].voteCount > maxVoteRecived) {
+        maxVoteRecived = candidates[i].voteCount;
+      } else if (candidates[i].voteCount == maxVoteRecived) {
+        maxVoteRecived = candidates[i].voteCount;
+      }
+    }
+  };
+    return (
+      <div className="container-winner">
+        <div className="winner-info">
+          <p className="winner-tag">Winner!</p>
+          <h2> {winner.header}</h2>
+          <p className="winner-slogan">{winner.slogan}</p>
+        </div>
+        <div className="winner-votes">
+          <div className="votes-tag">Total Votes: </div>
+          <div className="vote-count">{winner.voteCount}</div>
+        </div>
+      </div>
+    );
+  };
+  const winnerCandidate = calcWinner(candidates);
+  return winnerCandidate.map(renderWinner);
+}
+
 export function displayResults(candidates) {
   const renderResults = (candidate) => {
     return (
@@ -150,13 +179,9 @@ export function displayResults(candidates) {
   return (
     <>
       {candidates.length > 0 ? (
-        <div className="container-item info">
-          <center>
-            <p>Here are all the results.</p>
-          </center>
-        </div>
+        <div className="container-main">{displayWinner(candidates)}</div>
       ) : null}
-      <div className="container-main">
+      <div className="container-main" style={{ borderTop: "1px solid" }}>
         <h2>Results</h2>
         <small>Total candidates: {candidates.length}</small>
         {candidates.length < 1 ? (

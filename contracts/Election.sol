@@ -43,7 +43,7 @@ contract Election {
     {
         Candidate memory newCandidate =
             Candidate({
-                candidateId: candidateCount + 1,
+                candidateId: candidateCount, // Starting candidate is from 1
                 header: _header,
                 slogan: _slogan,
                 voteCount: 0

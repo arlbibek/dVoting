@@ -139,15 +139,22 @@ export default class Result extends Component {
   }
 }
 
+function displayWinner(candidates) {
+  const getWinner = (candidates) => {
+    // Returns an object having maxium vote count
     let maxVoteRecived = 0;
+    let winnerCandidate = [];
     for (let i = 0; i < candidates.length; i++) {
       if (candidates[i].voteCount > maxVoteRecived) {
         maxVoteRecived = candidates[i].voteCount;
-      } else if (candidates[i].voteCount == maxVoteRecived) {
-        maxVoteRecived = candidates[i].voteCount;
+        winnerCandidate = [candidates[i]];
+      } else if (candidates[i].voteCount === maxVoteRecived) {
+        winnerCandidate.push(candidates[i]);
       }
     }
+    return winnerCandidate;
   };
+  const renderWinner = (winner) => {
     return (
       <div className="container-winner">
         <div className="winner-info">
@@ -162,8 +169,8 @@ export default class Result extends Component {
       </div>
     );
   };
-  const winnerCandidate = calcWinner(candidates);
-  return winnerCandidate.map(renderWinner);
+  const winnerCandidate = getWinner(candidates);
+  return <>{winnerCandidate.map(renderWinner)}</>;
 }
 
 export function displayResults(candidates) {

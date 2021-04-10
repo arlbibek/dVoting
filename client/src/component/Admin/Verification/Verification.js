@@ -22,8 +22,8 @@ export default class Registration extends Component {
       voters: [],
     };
   }
-  // refreshing once
 
+  // refreshing once
   componentDidMount = async () => {
     if (!window.location.hash) {
       window.location = window.location + "#loaded";
@@ -187,7 +187,7 @@ export default class Registration extends Component {
           ) : (
             <>
               <div className="container-item info">
-                <center>List of voters</center>
+                <center>List of registred voters</center>
               </div>
               {this.state.voters.map(this.renderUnverifiedVoters)}
             </>

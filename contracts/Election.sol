@@ -52,6 +52,64 @@ contract Election {
         candidateCount += 1;
     }
 
+    struct ElectionDetails {
+        string adminName;
+        string adminEmail;
+        string adminTitle;
+        string electionTitle;
+        string organizationTitle;
+        // string validVoters;
+    }
+    ElectionDetails electionDetails;
+
+    function setElectionDetails(
+        string memory _adminName,
+        string memory _adminEmail,
+        string memory _adminTitle,
+        string memory _electionTitle,
+        string memory _organizationTitle
+    )
+        public
+        // string memory _validVoters
+        // Only admin can add
+        onlyAdmin
+    {
+        electionDetails = ElectionDetails(
+            _adminName,
+            _adminEmail,
+            _adminTitle,
+            _electionTitle,
+            _organizationTitle
+            // _validVoters
+        );
+        start = true;
+        end = false;
+    }
+
+    function getAdminName() public view returns (string memory) {
+        return electionDetails.adminName;
+    }
+
+    function getAdminEmail() public view returns (string memory) {
+        return electionDetails.adminEmail;
+    }
+
+    function getAdminTitle() public view returns (string memory) {
+        return electionDetails.adminTitle;
+    }
+
+    function getElectionTitle() public view returns (string memory) {
+        return electionDetails.electionTitle;
+    }
+
+    function getOrganizationTitle() public view returns (string memory) {
+        return electionDetails.organizationTitle;
+    }
+
+    // function getValidVoters() public view returns (string memory) {
+    //     return electionDetails.validVoters;
+    // }
+
     function getTotalCandidate() public view returns (uint256) {
         // Returns total number of candidates
         return candidateCount;

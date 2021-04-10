@@ -31,6 +31,10 @@ h1 {
   overflow: auto;
 }
 
+.title {
+  text-transform: capitalize;
+}
+
 .container-list {
   width: 100%;
   padding: 11px;
@@ -39,6 +43,10 @@ h1 {
   justify-content: center;
   display: block;
   overflow: auto;
+}
+.center-items {
+  display: grid;
+  place-items: center;
 }
 
 @media all and (max-width: 1020px) {

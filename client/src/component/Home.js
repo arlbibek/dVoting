@@ -1,12 +1,19 @@
+// Node modules
 import React, { Component } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
+// Components
 import Navbar from "./Navbar/Navigation";
 import NavbarAdmin from "./Navbar/NavigationAdmin";
+import FileReader from "./FileReader";
 
+// Contract
 import getWeb3 from "../getWeb3";
 import Election from "../contracts/Election.json";
+
+// CSS
+import "./Home.css";
 
 export default class Home extends Component {
   constructor(props) {
@@ -21,8 +28,8 @@ export default class Home extends Component {
       elDetails: {},
     };
   }
-  // refreshing once
 
+  // refreshing once
   componentDidMount = async () => {
     if (!window.location.hash) {
       window.location = window.location + "#loaded";
@@ -62,7 +69,7 @@ export default class Home extends Component {
       const end = await this.state.ElectionInstance.methods.getEnd().call();
       this.setState({ elEnded: end });
 
-      // Geting election details from the contract
+      // Getting election details from the contract
       const adminName = await this.state.ElectionInstance.methods
         .getAdminName()
         .call();
@@ -134,7 +141,10 @@ export default class Home extends Component {
           </div>
           {!this.state.elStarted & !this.state.elEnded ? (
             <div className="container-item info">
-              <center>The election have never been initiated.</center>
+              <center>
+                <h3>The election has not been initialize.</h3>
+                <p>Set up the election.</p>
+              </center>
             </div>
           ) : null}
         </div>
@@ -228,7 +238,7 @@ export default class Home extends Component {
                     />
 
                     <label className="label">
-                      Job Title or Postion{" "}
+                      Job Title or Position{" "}
                       {errors.adminTitle && <EMsg msg="*required" />}
                     </label>
                     <input
@@ -245,7 +255,7 @@ export default class Home extends Component {
                 <div className="container-item center-items">
                   <div>
                     <label className="label">
-                      Electoin Title{" "}
+                      Election Title{" "}
                       {errors.electionTitle && <EMsg msg="*required" />}
                     </label>
                     <input
@@ -270,29 +280,18 @@ export default class Home extends Component {
                     />
                   </div>
                 </div>
-                {/* <h3>Voter Validation Method</h3>
-              <div className="container-item center-items">
-              <label>
-              Validation email list{" "}
-              {errors.validVoterEmail && <EMsg msg="*required" />}
-              </label>
-              <textarea
-                  style={{ resize: "vertical" }}
-                  className="input"
-                  rows="7"
-                  cols="fixed"
-                  name="text"
-                  placeholder="Paste list of valid emails for Voter validation
-                Eg:
-                employe1@example.com
-                employe2@example.com
-                employe3@example.com
-                so on.."
-                  {...register("validVoterEmail", {
-                    required: true,
-                  })}
-                  />
-                </div> */}
+
+                <div>
+                  <h3>Voter Validation Method</h3>
+                  <div className="container-item center-items">
+                    <label>
+                      Validation email list{" "}
+                      {errors.validVoterEmail && <EMsg msg="*required" />}
+                    </label>
+                    <FileReader />
+                  </div>
+                  <div className="container-list center-items"></div>
+                </div>
               </div>
             ) : this.state.elStarted ? (
               <UserHome {...this.state.elDetails} />
@@ -303,13 +302,35 @@ export default class Home extends Component {
             >
               {!this.state.elStarted ? (
                 <>
-                  {/* edit here to start election Again */}
+                  {/* edit here to display start election Again button */}
                   {!this.state.elEnded ? (
-                    <div className="container-item">
-                      <button type="submit" className="start-btn">
-                        Start Election {this.state.elEnded ? "Again" : null}
-                      </button>
-                    </div>
+                    <>
+                      <div
+                        className="container-item attention"
+                        style={{ display: "block" }}
+                      >
+                        <h2>Do not forget to add candidates.</h2>
+                        <p>
+                          Go to{" "}
+                          <Link
+                            title="Add a new "
+                            to="/addCandidate"
+                            style={{
+                              color: "black",
+                              textDecoration: "underline",
+                            }}
+                          >
+                            add candidates
+                          </Link>{" "}
+                          page.
+                        </p>
+                      </div>
+                      <div className="container-item">
+                        <button type="submit" className="start-btn">
+                          Start Election {this.state.elEnded ? "Again" : null}
+                        </button>
+                      </div>
+                    </>
                   ) : (
                     <div className="container-item">
                       <center>

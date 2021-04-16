@@ -27,11 +27,6 @@ export default function NavbarAdmin() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/StartEnd" activeClassName="nav-active">
-            Start/End
-          </NavLink>
-        </li>
-        <li>
           <NavLink to="/Registration" activeClassName="nav-active">
             <i className="far fa-registered" /> Registration
           </NavLink>

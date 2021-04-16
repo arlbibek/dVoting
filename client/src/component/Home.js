@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 // Components
 import Navbar from "./Navbar/Navigation";
 import NavbarAdmin from "./Navbar/NavigationAdmin";
-import FileReader from "./FileReader";
+import UserHome from "./UserHome";
+import StartEnd from "./StartEnd";
+import ElectionStatus from "./ElectionStatus";
 
 // Contract
 import getWeb3 from "../getWeb3";
@@ -15,6 +17,7 @@ import Election from "../contracts/Election.json";
 // CSS
 import "./Home.css";
 
+// const buttonRef = React.createRef();
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +28,10 @@ export default class Home extends Component {
       isAdmin: false,
       elStarted: false,
       elEnded: false,
+      myValidVoters: ["boo@gmail.com", "aryalbmail@gmail.com"],
       elDetails: {},
+      fileName: "",
+      fileContents: "",
     };
   }
 
@@ -85,6 +91,10 @@ export default class Home extends Component {
       const organizationTitle = await this.state.ElectionInstance.methods
         .getOrganizationTitle()
         .call();
+      const validVoterEmail = await this.state.ElectionInstance.methods
+        .getValidVoters()
+        .call();
+      console.log("Valid voter email from contract: ", validVoterEmail);
 
       this.setState({
         elDetails: {
@@ -93,6 +103,7 @@ export default class Home extends Component {
           adminTitle: adminTitle,
           electionTitle: electionTitle,
           organizationTitle: organizationTitle,
+          validVoterEmail: validVoterEmail,
         },
       });
     } catch (error) {
@@ -111,18 +122,20 @@ export default class Home extends Component {
     window.location.reload();
   };
   // register and start election
-  registerElection = async (data) => {
+  registerElection = async (data, validEmails) => {
     await this.state.ElectionInstance.methods
       .setElectionDetails(
         data.adminFName.toLowerCase() + " " + data.adminLName.toLowerCase(),
         data.adminEmail.toLowerCase(),
         data.adminTitle.toLowerCase(),
         data.electionTitle.toLowerCase(),
-        data.organizationTitle.toLowerCase()
+        data.organizationTitle.toLowerCase(),
+        validEmails
       )
       .send({ from: this.state.account, gas: 1000000 });
     window.location.reload();
   };
+
   render() {
     if (!this.state.web3) {
       return (
@@ -154,7 +167,7 @@ export default class Home extends Component {
           </>
         ) : this.state.elStarted ? (
           <>
-            <UserHome {...this.state.elDetails} />
+            <UserHome el={this.state.elDetails} />
           </>
         ) : !this.state.isElStarted && this.state.isElEnded ? (
           <>
@@ -175,13 +188,14 @@ export default class Home extends Component {
       </>
     );
   }
+
   renderAdminHome = () => {
     const EMsg = (props) => {
       return <span style={{ color: "tomato" }}>{props.msg}</span>;
     };
+
     const AdminHome = () => {
       // Contains of Home page for the Admin
-
       const {
         handleSubmit,
         register,
@@ -189,218 +203,134 @@ export default class Home extends Component {
       } = useForm();
 
       const onSubmit = (data) => {
-        this.registerElection(data);
+        this.registerElection(data, this.state.myValidVoters);
       };
 
       return (
-        <>
+        <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             {!this.state.elStarted & !this.state.elEnded ? (
               <div className="container-main">
-                <h3>About Admin</h3>
-                <div className="container-item center-items">
-                  <div>
-                    <label className="label">
-                      Full Name {errors.adminFName && <EMsg msg="*required" />}
-                    </label>
-                    <input
-                      className="input"
-                      type="text"
-                      placeholder="First Name"
-                      {...register("adminFName", {
-                        required: true,
-                      })}
-                    />
-                    <input
-                      className="input"
-                      type="text"
-                      placeholder="Last Name"
-                      {...register("adminLName")}
-                    />
+                {/* about-admin */}
+                <div className="about-admin">
+                  <h3>About Admin</h3>
+                  <div className="container-item center-items">
+                    <div>
+                      <label className="label">
+                        Full Name{" "}
+                        {errors.adminFName && <EMsg msg="*required" />}
+                        <input
+                          className="input"
+                          type="text"
+                          placeholder="First Name"
+                          {...register("adminFName", {
+                            required: true,
+                          })}
+                        />
+                        <input
+                          className="input"
+                          type="text"
+                          placeholder="Last Name"
+                          {...register("adminLName")}
+                        />
+                      </label>
 
-                    <label className="label">
-                      Email{" "}
-                      {errors.adminEmail && (
-                        <EMsg msg={errors.adminEmail.message} />
-                      )}
-                    </label>
-                    <input
-                      className="input"
-                      placeholder="eg. you@example.com"
-                      name="adminEmail"
-                      {...register("adminEmail", {
-                        required: "*Required",
-                        pattern: {
-                          value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/, // email validation using RegExp
-                          message: "*Invalid",
-                        },
-                      })}
-                    />
+                      <label className="label">
+                        Email{" "}
+                        {errors.adminEmail && (
+                          <EMsg msg={errors.adminEmail.message} />
+                        )}
+                        <input
+                          className="input"
+                          placeholder="eg. you@example.com"
+                          name="adminEmail"
+                          {...register("adminEmail", {
+                            required: "*Required",
+                            pattern: {
+                              value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/, // email validation using RegExp
+                              message: "*Invalid",
+                            },
+                          })}
+                        />
+                      </label>
 
-                    <label className="label">
-                      Job Title or Position{" "}
-                      {errors.adminTitle && <EMsg msg="*required" />}
-                    </label>
-                    <input
-                      className="input"
-                      type="text"
-                      placeholder="eg. HR Head "
-                      {...register("adminTitle", {
-                        required: true,
-                      })}
-                    />
+                      <label className="label">
+                        Job Title or Position{" "}
+                        {errors.adminTitle && <EMsg msg="*required" />}
+                        <input
+                          className="input"
+                          type="text"
+                          placeholder="eg. HR Head "
+                          {...register("adminTitle", {
+                            required: true,
+                          })}
+                        />
+                      </label>
+                    </div>
                   </div>
                 </div>
-                <h3>About Election</h3>
-                <div className="container-item center-items">
-                  <div>
-                    <label className="label">
-                      Election Title{" "}
-                      {errors.electionTitle && <EMsg msg="*required" />}
-                    </label>
-                    <input
-                      className="input"
-                      type="text"
-                      placeholder="eg. School Election"
-                      {...register("electionTitle", {
-                        required: true,
-                      })}
-                    />
-                    <label className="label">
-                      Organization Name{" "}
-                      {errors.organizationName && <EMsg msg="*required" />}
-                    </label>
-                    <input
-                      className="input"
-                      type="text"
-                      placeholder="eg. Lifeline Academy"
-                      {...register("organizationTitle", {
-                        required: true,
-                      })}
-                    />
+                {/* about-election */}
+                <div className="about-election">
+                  <h3>About Election</h3>
+                  <div className="container-item center-items">
+                    <div>
+                      <label className="label">
+                        Election Title{" "}
+                        {errors.electionTitle && <EMsg msg="*required" />}
+                        <input
+                          className="input"
+                          type="text"
+                          placeholder="eg. School Election"
+                          {...register("electionTitle", {
+                            required: true,
+                          })}
+                        />
+                      </label>
+                      <label className="label">
+                        Organization Name{" "}
+                        {errors.organizationName && <EMsg msg="*required" />}
+                        <input
+                          className="input"
+                          type="text"
+                          placeholder="eg. Lifeline Academy"
+                          {...register("organizationTitle", {
+                            required: true,
+                          })}
+                        />
+                      </label>
+                    </div>
                   </div>
                 </div>
-
-                <div>
+                {/* voter-validation */}
+                {/* <div className="voter-validation">
                   <h3>Voter Validation Method</h3>
                   <div className="container-item center-items">
                     <label>
-                      Validation email list{" "}
+                      Valid email list
                       {errors.validVoterEmail && <EMsg msg="*required" />}
+                      <p>File name: {this.state.fileName}</p>
+                      <p>File contents: {this.state.fileContents}</p>
                     </label>
-                    <FileReader />
                   </div>
                   <div className="container-list center-items"></div>
-                </div>
+                </div> */}
               </div>
             ) : this.state.elStarted ? (
-              <UserHome {...this.state.elDetails} />
+              <UserHome el={this.state.elDetails} />
             ) : null}
-            <div
-              className="container-main"
-              style={{ borderTop: "1px solid", marginTop: "0px" }}
-            >
-              {!this.state.elStarted ? (
-                <>
-                  {/* edit here to display start election Again button */}
-                  {!this.state.elEnded ? (
-                    <>
-                      <div
-                        className="container-item attention"
-                        style={{ display: "block" }}
-                      >
-                        <h2>Do not forget to add candidates.</h2>
-                        <p>
-                          Go to{" "}
-                          <Link
-                            title="Add a new "
-                            to="/addCandidate"
-                            style={{
-                              color: "black",
-                              textDecoration: "underline",
-                            }}
-                          >
-                            add candidates
-                          </Link>{" "}
-                          page.
-                        </p>
-                      </div>
-                      <div className="container-item">
-                        <button type="submit" className="start-btn">
-                          Start Election {this.state.elEnded ? "Again" : null}
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="container-item">
-                      <center>
-                        <p>Re-deploy the contract to start election again.</p>
-                      </center>
-                    </div>
-                  )}
-                  {this.state.elEnded ? (
-                    <div className="container-item">
-                      <center>
-                        <p>The election ended.</p>
-                      </center>
-                    </div>
-                  ) : null}
-                </>
-              ) : (
-                <>
-                  <div className="container-item">
-                    <center>
-                      <p>The election started.</p>
-                    </center>
-                  </div>
-                  <div className="container-item">
-                    <button
-                      type="button"
-                      onClick={this.endElection}
-                      className="start-btn"
-                    >
-                      End
-                    </button>
-                  </div>
-                </>
-              )}
-              <h3>Election Status</h3>
-              <div className="election-status">
-                <p>Started: {this.state.elStarted ? "True" : "False"}</p>
-                <p>Ended: {this.state.elEnded ? "True" : "False"}</p>
-              </div>
-            </div>
+            <StartEnd
+              elStarted={this.state.elStarted}
+              elEnded={this.state.elEnded}
+              endElFn={this.endElection}
+            />
+            <ElectionStatus
+              elStarted={this.state.elStarted}
+              elEnded={this.state.elEnded}
+            />
           </form>
-        </>
+        </div>
       );
     };
-
     return <AdminHome />;
   };
 }
-
-const UserHome = (el) => {
-  return (
-    <div>
-      <div className="container-main">
-        <div className="container-list title">
-          <h1>{el.electionTitle}</h1>
-          <br />
-          <center>{el.organizationTitle}</center>
-          <table style={{ marginTop: "21px" }}>
-            <tr>
-              <th>admin</th>
-              <td>
-                {el.adminName} ({el.adminTitle})
-              </td>
-            </tr>
-            <tr>
-              <th>contact</th>
-              <td style={{ textTransform: "none" }}>{el.adminEmail}</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
-};

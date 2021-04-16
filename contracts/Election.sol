@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.21 <0.8.0;
+pragma solidity >=0.4.21 <0.9.0;
+pragma experimental ABIEncoderV2;
 
 contract Election {
     address public admin;
@@ -23,12 +24,12 @@ contract Election {
     }
 
     modifier onlyAdmin() {
-        // modifier for only admin access
+        // Modifier for only admin access
         require(msg.sender == admin);
         _;
     }
+    // Modeling a candidate
     struct Candidate {
-        // Modeling a candidate
         uint256 candidateId;
         string header;
         string slogan;
@@ -36,6 +37,7 @@ contract Election {
     }
     mapping(uint256 => Candidate) public candidateDetails;
 
+    // Adding new candidates
     function addCandidate(string memory _header, string memory _slogan)
         public
         // Only admin can add
@@ -43,7 +45,7 @@ contract Election {
     {
         Candidate memory newCandidate =
             Candidate({
-                candidateId: candidateCount, // Starting candidate is from 1
+                candidateId: candidateCount,
                 header: _header,
                 slogan: _slogan,
                 voteCount: 0
@@ -58,7 +60,7 @@ contract Election {
         string adminTitle;
         string electionTitle;
         string organizationTitle;
-        // string validVoters;
+        string[] validVoters;
     }
     ElectionDetails electionDetails;
 
@@ -67,10 +69,10 @@ contract Election {
         string memory _adminEmail,
         string memory _adminTitle,
         string memory _electionTitle,
-        string memory _organizationTitle
+        string memory _organizationTitle,
+        string[] memory _validVoters
     )
         public
-        // string memory _validVoters
         // Only admin can add
         onlyAdmin
     {
@@ -79,13 +81,14 @@ contract Election {
             _adminEmail,
             _adminTitle,
             _electionTitle,
-            _organizationTitle
-            // _validVoters
+            _organizationTitle,
+            _validVoters
         );
         start = true;
         end = false;
     }
 
+    // Get Elections details
     function getAdminName() public view returns (string memory) {
         return electionDetails.adminName;
     }
@@ -106,22 +109,24 @@ contract Election {
         return electionDetails.organizationTitle;
     }
 
-    // function getValidVoters() public view returns (string memory) {
-    //     return electionDetails.validVoters;
-    // }
+    function getValidVoters() public view returns (string[] memory) {
+        return electionDetails.validVoters;
+    }
 
+    // Get candidates count
     function getTotalCandidate() public view returns (uint256) {
         // Returns total number of candidates
         return candidateCount;
     }
 
+    // Get voters count
     function getTotalVoter() public view returns (uint256) {
         // Returns total number of voters
         return voterCount;
     }
 
+    // Modeling a voter
     struct Voter {
-        // Modeling a voter
         address voterAddress;
         string name;
         string phone;
@@ -129,7 +134,6 @@ contract Election {
         bool hasVoted;
         bool isRegistered;
     }
-
     address[] public voters; // Array of address to store address of voters
     mapping(address => Voter) public voterDetails;
 
@@ -156,10 +160,9 @@ contract Election {
         onlyAdmin
     {
         voterDetails[voterAddress].isVerified = _verifedStatus;
-        // Voter storage voter = Voters[voterAddress];
-        // voter.isVerified: _verifedStatus;
     }
 
+    // Vote
     function vote(uint256 candidateId) public {
         require(voterDetails[msg.sender].hasVoted == false);
         require(voterDetails[msg.sender].isVerified == true);
@@ -169,20 +172,22 @@ contract Election {
         voterDetails[msg.sender].hasVoted = true;
     }
 
-    // Start election
-    function startElection() public onlyAdmin {
-        start = true;
-        end = false;
-    }
-
-    function getStart() public view returns (bool) {
-        return start;
-    }
+    // // Start election
+    // // Election is started whiel setting up the election details
+    // function startElection() public onlyAdmin {
+    //     start = true;
+    //     end = false;
+    // }
 
     // End election
     function endElection() public onlyAdmin {
         end = true;
         start = false;
+    }
+
+    // Get the start and end values
+    function getStart() public view returns (bool) {
+        return start;
     }
 
     function getEnd() public view returns (bool) {

@@ -1,12 +1,17 @@
+// Node modules
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
+// Components
 import Navbar from "../Navbar/Navigation";
 import NavbarAdmin from "../Navbar/NavigationAdmin";
+import NotInit from "../NotInit";
 
+// Contract
 import getWeb3 from "../../getWeb3";
 import Election from "../../contracts/Election.json";
 
+// CSS
 import "./Voting.css";
 
 export default class Voting extends Component {
@@ -65,13 +70,14 @@ export default class Voting extends Component {
         .getTotalCandidate()
         .call();
       this.setState({ candidateCount: candidateCount });
+
       // Get start and end values
       const start = await this.state.ElectionInstance.methods.getStart().call();
       this.setState({ isElStarted: start });
       const end = await this.state.ElectionInstance.methods.getEnd().call();
       this.setState({ isElEnded: end });
 
-      // Loadin Candidates detials
+      // Loading Candidates details
       for (let i = 1; i <= this.state.candidateCount; i++) {
         const candidate = await this.state.ElectionInstance.methods
           .candidateDetails(i - 1)
@@ -134,9 +140,7 @@ export default class Voting extends Component {
           <h2>
             {candidate.header} <small>#{candidate.id}</small>
           </h2>
-          {/* <p className="contact">{candidate.contact}</p> */}
           <p className="slogan">{candidate.slogan}</p>
-          {/* <p className="discription">{candidate.discription}</p> */}
         </div>
         <div className="vote-btn-container">
           <button
@@ -170,14 +174,7 @@ export default class Voting extends Component {
         {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
         <div>
           {!this.state.isElStarted && !this.state.isElEnded ? (
-            <>
-              <div className="container-item info">
-                <center>
-                  <h3>The election has not been initialize.</h3>
-                  <p>Please Wait..</p>
-                </center>
-              </div>
-            </>
+            <NotInit />
           ) : this.state.isElStarted && !this.state.isElEnded ? (
             <>
               {this.state.currentVoter.isRegistered ? (
@@ -214,7 +211,7 @@ export default class Voting extends Component {
                 <>
                   <div className="container-item attention">
                     <center>
-                      <p>You're not registred. Please register first.</p>
+                      <p>You're not registered. Please register first.</p>
                       <br />
                       <Link
                         to="/Registration"

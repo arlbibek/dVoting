@@ -1,8 +1,12 @@
+// Node modules
 import React, { Component } from "react";
 
+// Components
 import Navbar from "../Navbar/Navigation";
 import NavbarAdmin from "../Navbar/NavigationAdmin";
+import NotInit from "../NotInit";
 
+// Contract
 import getWeb3 from "../../getWeb3";
 import Election from "../../contracts/Election.json";
 
@@ -14,6 +18,8 @@ export default class Registration extends Component {
       web3: null,
       account: null,
       isAdmin: false,
+      isElStarted: false,
+      isElEnded: false,
       voterCount: undefined,
       voterName: "",
       voterPhone: "",
@@ -63,6 +69,12 @@ export default class Registration extends Component {
       if (this.state.account === admin) {
         this.setState({ isAdmin: true });
       }
+
+      // Get start and end values
+      const start = await this.state.ElectionInstance.methods.getStart().call();
+      this.setState({ isElStarted: start });
+      const end = await this.state.ElectionInstance.methods.getEnd().call();
+      this.setState({ isElEnded: end });
 
       // Total number of voters
       const voterCount = await this.state.ElectionInstance.methods
@@ -135,65 +147,76 @@ export default class Registration extends Component {
     return (
       <>
         {this.state.isAdmin ? <NavbarAdmin /> : <Navbar />}
-        <div className="container-item info">
-          <p>Total registred voters: {this.state.voters.length}</p>
-        </div>
-        {!this.state.currentVoter.isRegistered ? (
-          <div className="container-main">
-            <h3>Register</h3>
-            <div className="container-item">
-              <form>
-                <label>First Name</label>
-                <input
-                  type="text"
-                  placeholder="eg. Thanos"
-                  value={this.state.voterName}
-                  onChange={this.updateVoterName}
-                  style={{ width: "157px" }}
-                />{" "}
-                <label>
-                  Phone <span style={{ color: "tomato" }}>*</span>
-                </label>
-                <input
-                  type="number"
-                  placeholder="eg. 9841234567"
-                  value={this.state.voterPhone}
-                  onChange={this.updateVoterPhone}
-                  style={{ width: "157px" }}
-                />
-                <button
-                  className="btn-add"
-                  disabled={
-                    this.state.voterPhone.length !== 10 ||
-                    this.state.currentVoter.isRegistered
-                  }
-                  onClick={this.registerAsVoter}
-                >
-                  {this.state.currentVoter.isRegistered ? "Update" : "Register"}
-                </button>
-              </form>
+        {!this.state.isElStarted && !this.state.isElEnded ? (
+          <NotInit />
+        ) : (
+          <>
+            <div className="container-item info">
+              <p>Total registered voters: {this.state.voters.length}</p>
             </div>
-          </div>
-        ) : null}
-        <div
-          className="container-main"
-          style={{
-            borderTop: this.state.currentVoter.isRegistered
-              ? null
-              : "1px solid",
-          }}
-        >
-          {loadCurrentVoter(
-            this.state.currentVoter,
-            this.state.currentVoter.isRegistered
-          )}
-        </div>
-        {this.state.isAdmin ? (
-          <div className="container-main" style={{ borderTop: "1px solid" }}>
-            <small>TotalVoters: {this.state.voters.length}</small>
-            {loadAllVoters(this.state.voters)}
-          </div>
-        ) : null}
+            {!this.state.currentVoter.isRegistered ? (
+              <div className="container-main">
+                <h3>Register</h3>
+                <div className="container-item">
+                  <form>
+                    <label>First Name</label>
+                    <input
+                      type="text"
+                      placeholder="eg. Ava"
+                      value={this.state.voterName}
+                      onChange={this.updateVoterName}
+                      style={{ width: "157px" }}
+                    />{" "}
+                    <label>
+                      Phone <span style={{ color: "tomato" }}>*</span>
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="eg. 9841234567"
+                      value={this.state.voterPhone}
+                      onChange={this.updateVoterPhone}
+                      style={{ width: "157px" }}
+                    />
+                    <button
+                      className="btn-add"
+                      disabled={
+                        this.state.voterPhone.length !== 10 ||
+                        this.state.currentVoter.isRegistered
+                      }
+                      onClick={this.registerAsVoter}
+                    >
+                      {this.state.currentVoter.isRegistered
+                        ? "Update"
+                        : "Register"}
+                    </button>
+                  </form>
+                </div>
+              </div>
+            ) : null}
+            <div
+              className="container-main"
+              style={{
+                borderTop: this.state.currentVoter.isRegistered
+                  ? null
+                  : "1px solid",
+              }}
+            >
+              {loadCurrentVoter(
+                this.state.currentVoter,
+                this.state.currentVoter.isRegistered
+              )}
+            </div>
+            {this.state.isAdmin ? (
+              <div
+                className="container-main"
+                style={{ borderTop: "1px solid" }}
+              >
+                <small>TotalVoters: {this.state.voters.length}</small>
+                {loadAllVoters(this.state.voters)}
+              </div>
+            ) : null}
+          </>
+        )}
       </>
     );
   }

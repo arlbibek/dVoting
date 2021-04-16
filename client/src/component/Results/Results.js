@@ -1,12 +1,17 @@
+// Node modules
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
+// Components
 import Navbar from "../Navbar/Navigation";
 import NavbarAdmin from "../Navbar/NavigationAdmin";
+import NotInit from "../NotInit";
 
+// Contract
 import getWeb3 from "../../getWeb3";
 import Election from "../../contracts/Election.json";
 
+// CSS
 import "./Results.css";
 
 export default class Result extends Component {
@@ -105,31 +110,22 @@ export default class Result extends Component {
         <br />
         <div>
           {!this.state.isElStarted && !this.state.isElEnded ? (
-            <>
-              <div className="container-item info">
-                <center>
-                  <h3>The election has never been initialize.</h3>
-                  <p>Please Wait..</p>
-                </center>
-              </div>
-            </>
+            <NotInit />
           ) : this.state.isElStarted && !this.state.isElEnded ? (
-            <>
-              <div className="container-item attention">
-                <center>
-                  <h3>The election is being conducted at the movement.</h3>
-                  <p>Result will be displayed once the election has ended.</p>
-                  <p>Go ahead and cast your vote {"(if not already)"}.</p>
-                  <br />
-                  <Link
-                    to="/Voting"
-                    style={{ color: "black", textDecoration: "underline" }}
-                  >
-                    Voting Page
-                  </Link>
-                </center>
-              </div>
-            </>
+            <div className="container-item attention">
+              <center>
+                <h3>The election is being conducted at the movement.</h3>
+                <p>Result will be displayed once the election has ended.</p>
+                <p>Go ahead and cast your vote {"(if not already)"}.</p>
+                <br />
+                <Link
+                  to="/Voting"
+                  style={{ color: "black", textDecoration: "underline" }}
+                >
+                  Voting Page
+                </Link>
+              </center>
+            </div>
           ) : !this.state.isElStarted && this.state.isElEnded ? (
             displayResults(this.state.candidates)
           ) : null}

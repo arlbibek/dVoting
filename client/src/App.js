@@ -9,7 +9,8 @@ import Registration from "./component/Registration/Registration";
 
 import AddCandidate from "./component/Admin/AddCandidate/AddCandidate";
 import Verification from "./component/Admin/Verification/Verification";
-import StartEnd from "./component/Admin/StartEnd/StartEnd";
+import test from "./component/test";
+// import StartEnd from "./component/Admin/StartEnd/StartEnd";
 
 import Footer from "./component/Footer/Footer";
 
@@ -27,7 +28,7 @@ export default class App extends Component {
             <Route exact path="/Results" component={Results} />
             <Route exact path="/Registration" component={Registration} />
             <Route exact path="/Verification" component={Verification} />
-            <Route exact path="/StartEnd" component={StartEnd} />
+            <Route exact path="/test" component={test} />
             <Route exact path="*" component={NotFound} />
           </Switch>
         </Router>

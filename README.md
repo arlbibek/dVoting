@@ -4,11 +4,6 @@
 
 A decentralized voting system based on Ethereum blockchain technology (designed for corporate use).
 
-## Todo
-
-- [ ] Email verification for the voter before registration.
-- [ ] Final code refinements.
-
 ## Requirements
 
 - [Node.js](https://nodejs.org)

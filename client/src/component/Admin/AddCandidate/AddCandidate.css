@@ -6,30 +6,27 @@
   margin-left: auto;
   overflow: auto;
 }
-input,
-label,
-.btn-add {
-  margin-left: 7px;
-  margin-right: 7px;
-}
-input,
-label {
+.input-ac {
+  margin: 0.5em;
+  margin-left: 0;
+  padding: 1em;
   display: block;
-  margin-bottom: 11px;
   width: 333px;
 }
-input,
-.btn-add {
-  padding: 11px;
+.label-ac {
+  display: block;
+  margin: 0.1em;
+  padding: 0.5em;
 }
 .btn-add {
   width: 25%;
+  padding: 1em;
   float: inline-end;
+  margin: 1em;
 }
 
 @media all and (max-width: 400px) {
-  input,
-  label,
+  .input-ac,
   .btn-add {
     width: 100%;
   }

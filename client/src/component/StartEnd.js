@@ -2,6 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const StartEnd = (props) => {
+  const btn = {
+    display: "block",
+    padding: "21px",
+    margin: "7px",
+    minWidth: "max-content",
+    textAlign: "center",
+    width: "333px",
+    alignSelf: "center",
+  };
   return (
     <div
       className="container-main"
@@ -33,7 +42,7 @@ const StartEnd = (props) => {
                 </p>
               </div>
               <div className="container-item">
-                <button type="submit" className="start-btn">
+                <button type="submit" style={btn}>
                   Start Election {props.elEnded ? "Again" : null}
                 </button>
               </div>
@@ -65,7 +74,7 @@ const StartEnd = (props) => {
               type="button"
               // onClick={this.endElection}
               onClick={props.endElFn}
-              className="start-btn"
+              style={btn}
             >
               End
             </button>

@@ -65,7 +65,7 @@ export default class AddCandidate extends Component {
         this.setState({ isAdmin: true });
       }
 
-      // Loading Candidates detials
+      // Loading Candidates details
       for (let i = 0; i < this.state.candidateCount; i++) {
         const candidate = await this.state.ElectionInstance.methods
           .candidateDetails(i)
@@ -125,21 +125,26 @@ export default class AddCandidate extends Component {
           <small>Total candidates: {this.state.candidateCount}</small>
           <div className="container-item">
             <form className="form">
-              <label>Header</label>
-              <input
-                type="text"
-                placeholder="eg. Marcus"
-                value={this.state.header}
-                onChange={this.updateHeader}
-                style={{ width: "157px" }}
-              />
-              <label>Slogan</label>
-              <input
-                type="text"
-                placeholder="eg. It is what it is"
-                value={this.state.slogan}
-                onChange={this.updateSlogan}
-              />
+              <label className={"label-ac"}>
+                Header
+                <input
+                  className={"input-ac"}
+                  type="text"
+                  placeholder="eg. Marcus"
+                  value={this.state.header}
+                  onChange={this.updateHeader}
+                />
+              </label>
+              <label className={"label-ac"}>
+                Slogan
+                <input
+                  className={"input-ac"}
+                  type="text"
+                  placeholder="eg. It is what it is"
+                  value={this.state.slogan}
+                  onChange={this.updateSlogan}
+                />
+              </label>
               <button
                 className="btn-add"
                 disabled={

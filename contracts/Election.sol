@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.21 <0.9.0;
-pragma experimental ABIEncoderV2;
 
 contract Election {
     address public admin;
@@ -54,13 +53,13 @@ contract Election {
         candidateCount += 1;
     }
 
+    // Modeling a Election Details
     struct ElectionDetails {
         string adminName;
         string adminEmail;
         string adminTitle;
         string electionTitle;
         string organizationTitle;
-        string[] validVoters;
     }
     ElectionDetails electionDetails;
 
@@ -69,8 +68,7 @@ contract Election {
         string memory _adminEmail,
         string memory _adminTitle,
         string memory _electionTitle,
-        string memory _organizationTitle,
-        string[] memory _validVoters
+        string memory _organizationTitle
     )
         public
         // Only admin can add
@@ -81,8 +79,7 @@ contract Election {
             _adminEmail,
             _adminTitle,
             _electionTitle,
-            _organizationTitle,
-            _validVoters
+            _organizationTitle
         );
         start = true;
         end = false;
@@ -107,10 +104,6 @@ contract Election {
 
     function getOrganizationTitle() public view returns (string memory) {
         return electionDetails.organizationTitle;
-    }
-
-    function getValidVoters() public view returns (string[] memory) {
-        return electionDetails.validVoters;
     }
 
     // Get candidates count
@@ -172,20 +165,13 @@ contract Election {
         voterDetails[msg.sender].hasVoted = true;
     }
 
-    // // Start election
-    // // Election is started whiel setting up the election details
-    // function startElection() public onlyAdmin {
-    //     start = true;
-    //     end = false;
-    // }
-
     // End election
     function endElection() public onlyAdmin {
         end = true;
         start = false;
     }
 
-    // Get the start and end values
+    // Get election start and end values
     function getStart() public view returns (bool) {
         return start;
     }

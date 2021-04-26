@@ -6,6 +6,9 @@ import Navbar from "../Navbar/Navigation";
 import NavbarAdmin from "../Navbar/NavigationAdmin";
 import NotInit from "../NotInit";
 
+// CSS
+import "./Registration.css";
+
 // Contract
 import getWeb3 from "../../getWeb3";
 import Election from "../../contracts/Election.json";
@@ -154,45 +157,68 @@ export default class Registration extends Component {
             <div className="container-item info">
               <p>Total registered voters: {this.state.voters.length}</p>
             </div>
-            {!this.state.currentVoter.isRegistered ? (
-              <div className="container-main">
-                <h3>Register</h3>
-                <div className="container-item">
-                  <form>
-                    <label>First Name</label>
-                    <input
-                      type="text"
-                      placeholder="eg. Ava"
-                      value={this.state.voterName}
-                      onChange={this.updateVoterName}
-                      style={{ width: "157px" }}
-                    />{" "}
-                    <label>
-                      Phone <span style={{ color: "tomato" }}>*</span>
+            <div className="container-main">
+              <h3>Registration</h3>
+              <small>Register to vote.</small>
+              <div className="container-item">
+                <form>
+                  <div className="div-li">
+                    <label className={"label-r"}>
+                      Account Address
+                      <input
+                        className={"input-r"}
+                        type="text"
+                        value={this.state.account}
+                        style={{ width: "400px" }}
+                      />{" "}
                     </label>
-                    <input
-                      type="number"
-                      placeholder="eg. 9841234567"
-                      value={this.state.voterPhone}
-                      onChange={this.updateVoterPhone}
-                      style={{ width: "157px" }}
-                    />
-                    <button
-                      className="btn-add"
-                      disabled={
-                        this.state.voterPhone.length !== 10 ||
-                        this.state.currentVoter.isRegistered
-                      }
-                      onClick={this.registerAsVoter}
-                    >
-                      {this.state.currentVoter.isRegistered
-                        ? "Update"
-                        : "Register"}
-                    </button>
-                  </form>
-                </div>
+                  </div>
+                  <div className="div-li">
+                    <label className={"label-r"}>
+                      Name
+                      <input
+                        className={"input-r"}
+                        type="text"
+                        placeholder="eg. Ava"
+                        value={this.state.voterName}
+                        onChange={this.updateVoterName}
+                      />{" "}
+                    </label>
+                  </div>
+                  <div className="div-li">
+                    <label className={"label-r"}>
+                      Phone number <span style={{ color: "tomato" }}>*</span>
+                      <input
+                        className={"input-r"}
+                        type="number"
+                        placeholder="eg. 9841234567"
+                        value={this.state.voterPhone}
+                        onChange={this.updateVoterPhone}
+                      />
+                    </label>
+                  </div>
+                  <p className="note">
+                    <span style={{ color: "tomato" }}> Note: </span>
+                    <br /> Make sure your account address and Phone number are
+                    correct. <br /> Admin might not approve your account if the
+                    provided Phone number nub does not matches the account
+                    address registered in admins catalogue.
+                  </p>
+                  <button
+                    className="btn-add"
+                    disabled={
+                      this.state.voterPhone.length !== 10 ||
+                      this.state.currentVoter.isVerified
+                    }
+                    onClick={this.registerAsVoter}
+                  >
+                    {this.state.currentVoter.isRegistered
+                      ? "Update"
+                      : "Register"}
+                  </button>
+                </form>
               </div>
-            ) : null}
+            </div>
             <div
               className="container-main"
               style={{
@@ -227,7 +253,7 @@ export function loadCurrentVoter(voter, isRegistered) {
       <div
         className={"container-item " + (isRegistered ? "success" : "attention")}
       >
-        <center>Your Info</center>
+        <center>Your Registered Info</center>
       </div>
       <div
         className={"container-list " + (isRegistered ? "success" : "attention")}
@@ -254,7 +280,7 @@ export function loadCurrentVoter(voter, isRegistered) {
             <td>{voter.isVerified ? "True" : "False"}</td>
           </tr>
           <tr>
-            <th>Registred</th>
+            <th>Registered</th>
             <td>{voter.isRegistered ? "True" : "False"}</td>
           </tr>
         </table>
@@ -289,7 +315,7 @@ export function loadAllVoters(voters) {
               <td>{voter.isVerified ? "True" : "False"}</td>
             </tr>
             <tr>
-              <th>Registred</th>
+              <th>Registered</th>
               <td>{voter.isRegistered ? "True" : "False"}</td>
             </tr>
           </table>

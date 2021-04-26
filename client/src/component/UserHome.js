@@ -4,7 +4,6 @@ function UserHome(props) {
   return (
     <div>
       <div className="container-main">
-        boo
         <div className="container-list title">
           <h1>{props.el.electionTitle}</h1>
           <br />
@@ -20,22 +19,6 @@ function UserHome(props) {
               <th>contact</th>
               <td style={{ textTransform: "none" }}>{props.el.adminEmail}</td>
             </tr>
-            {/* 
-            <tr>
-              <th>Total valid voters</th>
-              <td style={{ textTransform: "none" }}>
-                {props.el.validVoterEmail.length}
-                {console.log(props.el.validVoterEmail.length)}
-              </td>
-            </tr>
-            <tr>
-              <th>Email</th>
-              {props.el.validVoterEmail.map((email) => (
-                <td style={{ textTransform: "none" }} key={email}>
-                  {email}
-                </td>
-              ))}
-            </tr> */}
           </table>
         </div>
       </div>

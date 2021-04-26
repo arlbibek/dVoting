@@ -28,10 +28,7 @@ export default class Home extends Component {
       isAdmin: false,
       elStarted: false,
       elEnded: false,
-      myValidVoters: ["boo@gmail.com", "aryalbmail@gmail.com"],
       elDetails: {},
-      fileName: "",
-      fileContents: "",
     };
   }
 
@@ -91,10 +88,6 @@ export default class Home extends Component {
       const organizationTitle = await this.state.ElectionInstance.methods
         .getOrganizationTitle()
         .call();
-      const validVoterEmail = await this.state.ElectionInstance.methods
-        .getValidVoters()
-        .call();
-      console.log("Valid voter email from contract: ", validVoterEmail);
 
       this.setState({
         elDetails: {
@@ -103,7 +96,6 @@ export default class Home extends Component {
           adminTitle: adminTitle,
           electionTitle: electionTitle,
           organizationTitle: organizationTitle,
-          validVoterEmail: validVoterEmail,
         },
       });
     } catch (error) {
@@ -122,15 +114,14 @@ export default class Home extends Component {
     window.location.reload();
   };
   // register and start election
-  registerElection = async (data, validEmails) => {
+  registerElection = async (data) => {
     await this.state.ElectionInstance.methods
       .setElectionDetails(
         data.adminFName.toLowerCase() + " " + data.adminLName.toLowerCase(),
         data.adminEmail.toLowerCase(),
         data.adminTitle.toLowerCase(),
         data.electionTitle.toLowerCase(),
-        data.organizationTitle.toLowerCase(),
-        validEmails
+        data.organizationTitle.toLowerCase()
       )
       .send({ from: this.state.account, gas: 1000000 });
     window.location.reload();
@@ -156,7 +147,11 @@ export default class Home extends Component {
             <div className="container-item info">
               <center>
                 <h3>The election has not been initialize.</h3>
-                <p>Set up the election.</p>
+                {this.state.isAdmin ? (
+                  <p>Set up the election.</p>
+                ) : (
+                  <p>Please wait..</p>
+                )}
               </center>
             </div>
           ) : null}
@@ -203,7 +198,7 @@ export default class Home extends Component {
       } = useForm();
 
       const onSubmit = (data) => {
-        this.registerElection(data, this.state.myValidVoters);
+        this.registerElection(data);
       };
 
       return (
@@ -216,11 +211,11 @@ export default class Home extends Component {
                   <h3>About Admin</h3>
                   <div className="container-item center-items">
                     <div>
-                      <label className="label">
+                      <label className="label-home">
                         Full Name{" "}
                         {errors.adminFName && <EMsg msg="*required" />}
                         <input
-                          className="input"
+                          className="input-home"
                           type="text"
                           placeholder="First Name"
                           {...register("adminFName", {
@@ -228,20 +223,20 @@ export default class Home extends Component {
                           })}
                         />
                         <input
-                          className="input"
+                          className="input-home"
                           type="text"
                           placeholder="Last Name"
                           {...register("adminLName")}
                         />
                       </label>
 
-                      <label className="label">
+                      <label className="label-home">
                         Email{" "}
                         {errors.adminEmail && (
                           <EMsg msg={errors.adminEmail.message} />
                         )}
                         <input
-                          className="input"
+                          className="input-home"
                           placeholder="eg. you@example.com"
                           name="adminEmail"
                           {...register("adminEmail", {
@@ -254,11 +249,11 @@ export default class Home extends Component {
                         />
                       </label>
 
-                      <label className="label">
+                      <label className="label-home">
                         Job Title or Position{" "}
                         {errors.adminTitle && <EMsg msg="*required" />}
                         <input
-                          className="input"
+                          className="input-home"
                           type="text"
                           placeholder="eg. HR Head "
                           {...register("adminTitle", {
@@ -274,11 +269,11 @@ export default class Home extends Component {
                   <h3>About Election</h3>
                   <div className="container-item center-items">
                     <div>
-                      <label className="label">
+                      <label className="label-home">
                         Election Title{" "}
                         {errors.electionTitle && <EMsg msg="*required" />}
                         <input
-                          className="input"
+                          className="input-home"
                           type="text"
                           placeholder="eg. School Election"
                           {...register("electionTitle", {
@@ -286,11 +281,11 @@ export default class Home extends Component {
                           })}
                         />
                       </label>
-                      <label className="label">
+                      <label className="label-home">
                         Organization Name{" "}
                         {errors.organizationName && <EMsg msg="*required" />}
                         <input
-                          className="input"
+                          className="input-home"
                           type="text"
                           placeholder="eg. Lifeline Academy"
                           {...register("organizationTitle", {
@@ -301,19 +296,6 @@ export default class Home extends Component {
                     </div>
                   </div>
                 </div>
-                {/* voter-validation */}
-                {/* <div className="voter-validation">
-                  <h3>Voter Validation Method</h3>
-                  <div className="container-item center-items">
-                    <label>
-                      Valid email list
-                      {errors.validVoterEmail && <EMsg msg="*required" />}
-                      <p>File name: {this.state.fileName}</p>
-                      <p>File contents: {this.state.fileContents}</p>
-                    </label>
-                  </div>
-                  <div className="container-list center-items"></div>
-                </div> */}
               </div>
             ) : this.state.elStarted ? (
               <UserHome el={this.state.elDetails} />

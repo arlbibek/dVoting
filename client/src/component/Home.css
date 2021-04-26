@@ -1,30 +1,15 @@
-textarea {
-  resize: vertical;
-  width: 100%;
-  padding: 11px;
-  margin-left: auto;
-  margin-right: auto;
+.label-home {
+  padding: 0.5em;
 }
-.start-btn {
+.input-home {
+  margin-top: 1em;
+  margin-left: 7px;
+  margin-right: 7px;
+  padding: 1em;
+  min-width: 300px;
+}
+.input-home,
+.label-home {
   display: block;
-  padding: 21px;
-  margin: 7px;
-  min-width: max-content;
-  text-align: center;
-  width: 333px;
-  align-self: center;
-}
-.election-status {
-  padding: 11px;
-  margin: 7px;
-  width: 100%;
-  border: 1px solid tomato;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  border-radius: 0.5em;
-  overflow: auto;
-  align-items: center;
-  justify-content: space-around;
-  display: flex;
+  margin-bottom: 11px;
 }

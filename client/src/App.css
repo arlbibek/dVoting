@@ -8,6 +8,15 @@ h1 {
   text-align: center;
 }
 
+code {
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  background-color: #f1f1f1;
+  padding: 2px;
+  font-size: 105%;
+  border-radius: 6px;
+  border: 1px solid;
+}
+
 .container-main {
   background-color: none;
   padding: 1%;

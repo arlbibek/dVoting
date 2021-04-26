@@ -142,7 +142,7 @@ export default class Registration extends Component {
               <td>{voter.isVerified ? "True" : "False"}</td>
             </tr>
             <tr>
-              <th>Registred</th>
+              <th>Registered</th>
               <td>{voter.isRegistered ? "True" : "False"}</td>
             </tr>
           </table>
@@ -172,7 +172,7 @@ export default class Registration extends Component {
       return (
         <>
           <Navbar />
-          <AdminOnly page="Verification page" />
+          <AdminOnly page="Verification Page." />
         </>
       );
     }
@@ -183,11 +183,11 @@ export default class Registration extends Component {
           <h3>Verification</h3>
           <small>Total Voters: {this.state.voters.length}</small>
           {this.state.voters.length < 1 ? (
-            <div className="container-item info">None has registred yet.</div>
+            <div className="container-item info">None has registered yet.</div>
           ) : (
             <>
               <div className="container-item info">
-                <center>List of registred voters</center>
+                <center>List of registered voters</center>
               </div>
               {this.state.voters.map(this.renderUnverifiedVoters)}
             </>

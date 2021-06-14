@@ -8,7 +8,7 @@ A decentralized voting system based on Ethereum blockchain technology (designed 
 
 ## System Workflow
 
-> Below a brief explanation of the basic workflow of the dVoting application.
+> Below is a brief explanation of the basic workflow of the dVoting application.
 
 Admin will create a voting instance by launching/deploying the system in a blockchain network (EVM), then create an election instance and start the election with the details of the election filled in and adding candidates for voters to vote. Then voters with their blockchain account connect to the same blockchain network register to become a voter. When a user registers to be a voter the registration details are displayed in the admins' panel (i.e. verification page) and the admin will check if the registration information (blockchain account address, name and phone number) is valid and matches with his record. If the registration is valid then the admin approves the registered user and the registered user becomes eligible to take part in the created election. The registered user (voter) then from the voting page casts his/her voter the candidate of his/her interest. After some time, depending on the scale of the election the admin ends the election. As soon as the election ends the voting is closed and the results are displayed avouching the winner at the top of the results page.
 

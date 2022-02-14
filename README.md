@@ -29,23 +29,18 @@ A brief explanation on the basic workflow of the application.
 
 #### Getting the requirements
 
-1. Download and install NodeJS
+1. Download and install **NodeJS**
 
-   > node.js `v14.15.4`
+   Download and install NodeJS from [here](https://nodejs.org/en/download/ "Go to official NodeJS download page.").
 
-   Download NodeJS from [here](https://nodejs.org/en/download/ "Go to official NodeJS download page.").
-
-1. Install truffle and ganache-cli
-
-   > truffle `v5.2.4`  
-   > ganache-cli `v6.12.2`
+1. Install **truffle** and **ganache-cli** using node packager manager (npm)
 
    ```shell
    npm install -g truffle
    npm install -g ganache-cli
    ```
 
-1. Install metamask browser extension
+1. Install **metamask** browser extension
 
    Download and install metamask from [here](https://metamask.io/download "Go to official metamask download page.").
 
@@ -66,13 +61,14 @@ A brief explanation on the basic workflow of the application.
 
    > Note: Do not close `ganache-cli` (the blockchain network needs to be running all the time)
 
-1. Configure metamask on the browser with following details
+1. Configure metamask on the browser with the following details
 
    New RPC URL: `http://localhost:8545`  
    Chain ID: `1337`
 
-1. Import accounts using private keys from ganache-cli to the metamask extension on the browser
-1. Deploy smart contract to the (local) blockchain
+1. Import account(s) using private keys from ganache-cli to the metamask extension on the browser
+
+1. Deploy smart contract to the (local) blockchain network (i.e ganache-cli)
 
    ```shell
    # on the dVoting directory
@@ -81,7 +77,7 @@ A brief explanation on the basic workflow of the application.
 
    > Note: Use `truffle migrate --reset` for re-deployments
 
-1. Launch the development server (fronted)
+1. Launch the development server (frontend)
 
    ```shell
    cd client
@@ -89,14 +85,20 @@ A brief explanation on the basic workflow of the application.
    npm start
    ```
 
----
+## To-Do List
 
-\# That is all.
+Possible features to add/improve within the app.
+
+- [ ] **Email Verification**—adding email/phone verification (OTP, etc..) while registering for voters.
+- [ ] **Automated Verification**—adding an automated verification (rather than manually approving by the admin) for the registered users. This could be based on the custom cooperation email, custom list of emails, or custom list of phone numbers, etc.
+- [ ] **Report**—option to generate a report at the end of an election. The report could contain a range of information including the number of people that were eligible to vote, the number of people that participated in the election, a bar-chart/pie-chart showing the election statistics, etc.
+- [ ] **Workflow improvements**—overall workflow improvements (eg. option to add candidates within the election setup page), with overall GUI improvements.
+- [ ] **Multiple election instance**—ability to create multiple election instances without having to re-deploy the smart contract.
+
+---
 
 _Feel free to contribute._
 
 ---
 
-Best,
-
-[Bibek Aryal](https://arlbibek.github.io/)
+Made with ❤️ by [Bibek Aryal](https://bibeka.com.np/).

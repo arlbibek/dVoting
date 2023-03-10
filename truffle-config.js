@@ -7,7 +7,7 @@ module.exports = {
   networks: {
     development: {
       network_id: "*",
-      host: "localhost",
+      host: "127.0.0.1",
       // port: 7545, // for ganache gui
       port: 8545, // for ganache-cli
       gas: 6721975,

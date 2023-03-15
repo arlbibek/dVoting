@@ -86,24 +86,19 @@ contract Election {
     }
 
     // Get Elections details
-    function getAdminName() public view returns (string memory) {
-        return electionDetails.adminName;
-    }
-
-    function getAdminEmail() public view returns (string memory) {
-        return electionDetails.adminEmail;
-    }
-
-    function getAdminTitle() public view returns (string memory) {
-        return electionDetails.adminTitle;
-    }
-
-    function getElectionTitle() public view returns (string memory) {
-        return electionDetails.electionTitle;
-    }
-
-    function getOrganizationTitle() public view returns (string memory) {
-        return electionDetails.organizationTitle;
+    function getElectionDetails()
+    public
+    view
+    returns(string memory adminName, 
+    string memory adminEmail, 
+    string memory adminTitle, 
+    string memory electionTitle, 
+    string memory organizationTitle){
+        return(electionDetails.adminName, 
+        electionDetails.adminEmail, 
+        electionDetails.adminTitle, 
+        electionDetails.electionTitle, 
+        electionDetails.organizationTitle);
     }
 
     // Get candidates count

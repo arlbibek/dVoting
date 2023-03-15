@@ -73,29 +73,17 @@ export default class Home extends Component {
       this.setState({ elEnded: end });
 
       // Getting election details from the contract
-      const adminName = await this.state.ElectionInstance.methods
-        .getAdminName()
-        .call();
-      const adminEmail = await this.state.ElectionInstance.methods
-        .getAdminEmail()
-        .call();
-      const adminTitle = await this.state.ElectionInstance.methods
-        .getAdminTitle()
-        .call();
-      const electionTitle = await this.state.ElectionInstance.methods
-        .getElectionTitle()
-        .call();
-      const organizationTitle = await this.state.ElectionInstance.methods
-        .getOrganizationTitle()
-        .call();
-
+      const electionDetails = await this.state.ElectionInstance.methods
+      .getElectionDetails()
+      .call();
+      
       this.setState({
         elDetails: {
-          adminName: adminName,
-          adminEmail: adminEmail,
-          adminTitle: adminTitle,
-          electionTitle: electionTitle,
-          organizationTitle: organizationTitle,
+          adminName: electionDetails.adminName,
+          adminEmail: electionDetails.adminEmail,
+          adminTitle: electionDetails.adminTitle,
+          electionTitle: electionDetails.electionTitle,
+          organizationTitle: electionDetails.organizationTitle,
         },
       });
     } catch (error) {

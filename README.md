@@ -32,15 +32,13 @@ A brief explanation on the basic workflow of the application.
 1. Download and install **NodeJS**
 
    Download and install NodeJS from [here](https://nodejs.org/en/download/ "Go to official NodeJS download page.").
-
-1. Install **truffle** and **ganache-cli** using node packager manager (npm)
+2. Install **truffle** and **ganache-cli** using node packager manager (npm)
 
    ```shell
    npm install -g truffle
    npm install -g ganache-cli
    ```
-
-1. Install **metamask** browser extension
+3. Install **metamask** browser extension
 
    Download and install metamask from [here](https://metamask.io/download "Go to official metamask download page.").
 
@@ -52,7 +50,6 @@ A brief explanation on the basic workflow of the application.
    git clone https://github.com/arlbibek/dVoting.git
    cd dVoting
    ```
-
 2. Run local Ethereum blockchain
 
    ```shell
@@ -60,15 +57,19 @@ A brief explanation on the basic workflow of the application.
    ```
 
    > Note: Do not close `ganache-cli` (the blockchain network needs to be running all the time)
-
+   >
 3. Configure metamask on the browser with the following details
 
    New RPC URL: `http://127.0.0.1:8545` *(use `port: 7545` for **ganache gui**, update it in the file:`truffle-config.js` as well)*
 
    Chain ID: `1337`
 
-4. Import account(s) using private keys from ganache-cli to the metamask extension on the browser
+   In the MetaMask Chrome extension, navigate to settings, click on 'Add Network,' and enter the details provided above. Refer to the image below for guidance.
 
+   ![metamask_add_network](docs/README/metamask_configuration.png)
+
+   Note: The image above corresponds to MetaMask Version 11.7.3
+4. Import account(s) using private keys from ganache-cli to the metamask extension on the browser
 5. Deploy smart contract to the (local) blockchain network (i.e ganache-cli)
 
    ```shell
@@ -77,7 +78,7 @@ A brief explanation on the basic workflow of the application.
    ```
 
    > Note: Use `truffle migrate --reset` for re-deployments
-
+   >
 6. Launch the development server (frontend)
 
    ```shell
@@ -87,6 +88,7 @@ A brief explanation on the basic workflow of the application.
    ```
 
    > If you encounter **error** during `npm install`, please note that you might need to install Microsoft Visual C++ Redistributable packages from [learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) (here is the direct download link for X64: [aka.ms/vs/17/release/vc_redist.x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe))
+   >
 
 ## To-Do List
 
